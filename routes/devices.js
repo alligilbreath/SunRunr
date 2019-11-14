@@ -72,6 +72,18 @@ router.get('/myDevices', function(req, res, next){
 	}
 });
 
+//Get all sensor data for deviceId query
+router.get('/sensorData', function(req, res, next){
+	deviceData.find({"deviceId": req.query.deviceId}).exec(function(err,data){
+		if(err){
+			res.send("Error has occured");
+		}
+		else{
+			res.json(data);
+		}
+	});
+});
+
 router.post('/register', function(req, res, next) {
   let responseJson = {
     registered: false,
