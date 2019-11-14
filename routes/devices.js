@@ -196,7 +196,7 @@ router.post('/ping', function(req, res, next) {
 
 //Save information to server
 //Basically a copy-paste of potholes.js from ECE Server 19
-router.post('/hit', function(req, res) {
+router.post('/sunRun', function(req, res) {
 	var responseJson = {
 		status : "",
 		message : "",
