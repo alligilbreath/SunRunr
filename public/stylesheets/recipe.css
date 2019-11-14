@@ -1,0 +1,189 @@
+html {
+  font-family : Helvetica, sans-serif;
+  font-size : 10pt;
+  color : #888888;
+  width: 800px;
+}
+
+h1, h2 {
+   color : #F9B678;
+   font-weight : lighter;
+   text-transform : uppercase;
+}
+
+h1 {
+   font-size : 30pt;
+}
+
+h2 {
+   font-size : 16pt;
+}
+
+div.recipeInfo {
+   border-bottom : 2px dotted #F9B678;
+   margin : 5px 5px 20px 5px;
+   padding-bottom : 10px;
+}
+
+.recipeInfo h1 {
+   display: inline-block;
+   vertical-align : middle;
+   text-align : justify;
+   min-width : 300px;
+   max-width : 400px;
+   margin-right : 20px;
+   margin-bottom : 0px;
+}
+
+.recipeInfo p {
+   display : inline-block;
+   vertical-align : middle;
+}
+
+.recipeAttribution {
+   display: inline-block;
+   width:   40%;
+   vertical-align: middle;
+   text-align: right;
+}
+
+.author {  
+   color : #C0B1A2;
+   font-weight : lighter;
+   font-size : 12pt;
+}
+
+img {
+   height : 200px;
+   margin-right : 5px;
+}
+
+div.recipeSummary {
+   text-align : center;
+}
+
+table.recipeSummary {
+   display : inline-block;
+   border-spacing : 0;
+}
+
+.recipeSummary tr {
+   height : 50px;
+}
+
+.recipeSummary td {
+   color : white;
+   font-size : 12pt;
+   padding : 10px 10px 10px 10px;
+   border-top: 1px solid white;
+   border-bottom: 1px solid white;
+}
+
+.recipeSummary th {
+   color : #6e6e6e;
+   text-align : left;
+   font-size : 12pt;
+   padding : 10px 10px 10px 10px;
+   border-top: 1px solid white;
+   border-bottom: 1px solid white;
+}
+
+.recipeSummary tr:nth-child(1) {
+   background-color : #F39C12;
+}
+
+.recipeSummary tr:nth-child(2) {
+   background-color : #F4D03F;
+}
+
+.recipeSummary tr:nth-child(3) {
+   background-color : #ABEBC6;
+}
+
+.recipeSummary tr:nth-child(4) {
+   background-color : #ABB2B9;
+}
+
+
+.verb {
+   text-transform : uppercase;
+   color : #F9B678;
+}
+
+.ingredients li {
+   font-weight : bold;
+}
+
+div.recipeNotes {
+   margin : 5px;
+}
+
+div.recipeIngredients {
+   display : inline-block;
+   vertical-align : top;
+   max-width : 300px;
+   margin : 5px 20px 5px 5px;
+   border-bottom : 2px dotted #F9B678;
+}
+
+div.recipeIngredients h2 {
+   padding-bottom : 10px;
+   border-bottom : 2px dotted #F9B678;
+}
+
+.recipeIngredients ul {
+   padding-left : 10px;
+   list-style-type : none; /* Hide the marker for the ingredients list */
+}
+
+.recipeIngredients li {
+   padding : 2px;
+   font-weight: bold;
+}
+
+div.recipeDirections {
+   display : inline-block;
+   vertical-align : top;
+   margin : 5px;
+   border-bottom : 2px dotted #F9B678;
+   max-width: 445px;
+}
+
+div.recipeDirections h2 {
+   padding-bottom : 10px;
+   border-bottom : 2px dotted #F9B678;
+}
+
+
+
+.recipeDirections ol {
+   padding-left : 10px;
+}
+   
+.recipeDirections li {
+   padding-top : 10px;
+   padding-bottom : 10px;
+}
+
+/* CSS trick to create colored numbers for ol */
+.recipeDirections ol {
+   list-style : none; 
+   counter-reset : li
+}
+
+.recipeDirections li::before {
+  content : counter(li) "."; 
+  color : #F9B678;
+  margin-right : 5px;  
+}
+  
+.recipeDirections li {
+   counter-increment : li
+}
+
+footer {
+   text-align : center;
+   font-size : 9pt;
+   color : #C1C1C1;
+   margin-top : 30px;
+}
