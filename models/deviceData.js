@@ -5,6 +5,7 @@ var deviceDataSchema = new db.Schema({
     deviceId: String,
     longitude: String,
     latitude: String,
+    speed: String,
     uvIndex: String,
     //Including time just in case
     time: String

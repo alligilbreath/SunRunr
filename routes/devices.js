@@ -158,6 +158,8 @@ router.post('/ping', function(req, res, next) {
     return res.status(200).json(responseJson);
 });
 
+//Save information to server
+//Basically a copy-paste of potholes.js from ECE Server 19
 router.post('/hit', function(req, res) {
 	var responseJson = {
 		status : "",
@@ -199,6 +201,11 @@ router.post('/hit', function(req, res) {
 		responseJson.message = "Request missing latitude parameter.";
 		res.status(201).send(JSON.stringify(responseJson));
 	}
+  else if( !req.body.hasOwnProperty("speed") ) {
+    responseJson.status = "ERROR";
+    responseJson.message = "Request missing speed parameter.";
+    res.status(201).send(JSON.stringify(responseJson));
+  }
 	else if( !req.body.hasOwnProperty("uv") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing latitude parameter.";
@@ -211,9 +218,9 @@ router.post('/hit', function(req, res) {
 		res.status(201).send(JSON.stringify(responseJson));
 	}
 	else {
-		// Find the device and verify the apikey
+		// Find the device by deviceId and API
 			try{
-				deviceData.find({"deviceId": req.body.deviceId, "apikey": req.body.apikey}).exec(function(err1, data)
+				Device.find({"deviceId": req.body.deviceId, "apikey": req.body.apikey}).exec(function(err1, data)
 				{
 					//Device is not in database or there is an error
 					if (err1) {
@@ -231,6 +238,7 @@ router.post('/hit', function(req, res) {
 						deviceId: req.body.deviceId,
 						longitude: req.body.longitude,
 						latitude: req.body.latitude,
+            speed: req.body.speed,
 						uvIndex: req.body.uv,
 						time: Date.now(),
 					});
