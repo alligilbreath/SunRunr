@@ -276,7 +276,7 @@ router.post('/sunRun', function(req, res) {
 						latitude: req.body.latitude,
             speed: req.body.speed,
 						uvIndex: req.body.uv,
-						time: Date.now(),
+						time: req.body.time,
 					});
 					responseJson.message = "UV data recorded";
           //Save the Data
