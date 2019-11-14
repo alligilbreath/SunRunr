@@ -10,6 +10,7 @@ var deviceDataSchema = new db.Schema({
     //Including time just in case
     time: String
     //TODO: Where should threshold be stored? Here or device or user?
+    //TODO: Temperature, humidity, activity(?)
 });
 var deviceData = db.model("deviceData", deviceDataSchema);
 module.exports = deviceData;
