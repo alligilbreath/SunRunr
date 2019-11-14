@@ -48,6 +48,30 @@ router.get('/status/:devid', function(req, res, next) {
   });
 });
 
+//Get user's devices
+router.get('/myDevices', function(req, res, next){
+	if(!req.headers["x-auth"]) {
+		return res.status(401).json({ error: "Missing X-Auth header"});
+	}
+
+	var token = req.headers["x-auth"];
+
+	try {
+		var decoded = jwt.decode(token, secret);
+		Device.find({ userEmail: decoded.email }).exec(function(err, data) {
+			if(err) {
+				res.status(400).send("Error occurred while fetching devices");
+			}
+			else {
+				res.status(200).json(data);
+			}
+		});
+  }
+  catch (er) {
+		res.status(400).send(er);
+	}
+});
+
 router.post('/register', function(req, res, next) {
   let responseJson = {
     registered: false,
