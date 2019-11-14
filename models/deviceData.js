@@ -8,6 +8,7 @@ var deviceDataSchema = new db.Schema({
     uvIndex: String,
     //Including time just in case
     time: String
+    //TODO: Where should threshold be stored? Here or device or user?
 });
 var deviceData = db.model("deviceData", deviceDataSchema);
 module.exports = deviceData;
