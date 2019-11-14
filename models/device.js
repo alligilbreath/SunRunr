@@ -4,7 +4,9 @@ var deviceSchema = new db.Schema({
     apikey:       String,
     deviceId:     String,
     userEmail:    String,
-    lastContact:  { type: Date, default: Date.now }
+    //Including lastContact just in case
+    lastContact:  { type: Date, default: Date.now },
+    data: [String]
 });
 
 var Device = db.model("Device", deviceSchema);

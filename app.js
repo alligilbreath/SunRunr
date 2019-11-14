@@ -42,8 +42,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/participation', participationRouter);
-app.use('/currency', currencyRouter);
 
 app.use('/users', usersRouter);
 app.use('/devices', devicesRouter);
