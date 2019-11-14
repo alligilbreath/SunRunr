@@ -1,10 +1,3 @@
-# Server Example for ECE 413/513 - Fall 2019
-
-To install and run this server and the included examples on your local machine or server, run the following commands
-
-```
-git clone https://github.com/rlysecky/eceServer19.git
-cd eceServer19
-npm start
-```
+# SunRunr - Alli Gilbreath, Christian Garcia, Joel Thibault
+This is the server side implementation of our SunRunr project. The HTML and CSS will also be added to this in order to test and run. The firmware is developed separate for the Particle device via Particle's build site.
 
