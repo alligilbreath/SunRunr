@@ -3,14 +3,14 @@ var PLEASEGODWORK = "PLEASE WORK";
 
 function showData(){
 	
-	let userDeviceID = {deviceId: $("#userDeviceID").val()};
+	let deviceId = {deviceId: $("#deviceId").val()};
 	
 	
 	$.ajax({
 	   url: "/devices/sensorData", //TODO: Clarify actual url endpoint
 	   method: 'GET',
 	   contentType: 'application/json',
-	   data: JSON.stringify(userDeviceID),
+	   data: JSON.stringify(deviceId),
 	   dataType: 'json'
 	})
 		    .done(displayData)
