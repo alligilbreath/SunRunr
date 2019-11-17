@@ -43,6 +43,7 @@ router.post('/register', function(req, res, next) {
 
    bcrypt.hash(req.body.password, 10, function(err, hash) {
       if (err) {
+        console.log("Hash sucks");
          res.status(400).json({success : false, message : err.errmsg});
       }
       else {
@@ -54,10 +55,12 @@ router.post('/register', function(req, res, next) {
 
         newUser.save(function(err, user) {
           if (err) {
+            console.log("User already exists with that token");
              res.status(400).json({success : false, message : err.errmsg});
           }
           else {
-             res.status(201).json({success : true, message : user.fullName + "has been created", redirect: "/signin.html"});
+            console.log("User created");
+             res.status(201).json({success : true, message : user.fullName + "has been created", redirect: "/login.html"});
           }
         });
       }
