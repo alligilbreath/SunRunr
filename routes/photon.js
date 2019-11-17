@@ -5,7 +5,7 @@ var HwData = require("../models/hwdata");
 
 /* POST: Register new device. */
 router.post('/hit', function(req, res, next) {
-  var responseJson = { 
+  var responseJson = {
     status : "",
     message : ""
   };
@@ -22,13 +22,13 @@ router.post('/hit', function(req, res, next) {
     responseJson.message = "Request missing apikey parameter.";
     return res.status(201).send(JSON.stringify(responseJson));
   }
-  
+
   if( !req.body.hasOwnProperty("longitude") ) {
     responseJson.status = "ERROR";
     responseJson.message = "Request missing longitude parameter.";
     return res.status(201).send(JSON.stringify(responseJson));
   }
-  
+
   if( !req.body.hasOwnProperty("latitude") ) {
     responseJson.status = "ERROR";
     responseJson.message = "Request missing latitude parameter.";
@@ -44,15 +44,15 @@ router.post('/hit', function(req, res, next) {
         return res.status(201).send(JSON.stringify(responseJson));
       }
       else {
-        // Create a new hw data with user email time stamp 
-        var newHwData = new HwData({
+        // Create a new hw data with user email time stamp
+        var newHwData = new deviceData({
           userEmail: device.userEmail,
           deviceid: req.body.deviceId,
           longitude: req.body.longitude,
           latitude: req.body.latitude
         });
 
-        // Save device. If successful, return success. If not, return error message.                          
+        // Save device. If successful, return success. If not, return error message.
         newHwData.save(function(err, newHwData) {
           if (err) {
             responseJson.status = "ERROR";
@@ -66,11 +66,11 @@ router.post('/hit', function(req, res, next) {
           }
         });
       }
-    } 
+    }
     else {
       responseJson.status = "ERROR";
       responseJson.message = "Device ID " + req.body.deviceId + " not registered.";
-      return res.status(201).send(JSON.stringify(responseJson));    
+      return res.status(201).send(JSON.stringify(responseJson));
     }
   });
 });
