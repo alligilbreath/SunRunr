@@ -8,7 +8,7 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 	$.ajax({
 		//  TODO: IS IT "routes/users/signin" ?
 		url: "/users/signin", //TODO: What is the specific url/endpoint needed for routes/users.js?
-		method: "GET", // It's GET and not POST because we're trying to see if the user email and password exist in the database
+		method: "POST", // It's GET and not POST because we're trying to see if the user email and password exist in the database
 		contentType: "application/json",
 		data: JSON.stringify(infoToPass),
 		dataType: "json"

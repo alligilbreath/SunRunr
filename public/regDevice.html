@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>SunRunr - Register Device</title>
+      <link href="stylesheets/style.css" rel="stylesheet">
+      <script src="regDevice.js" defer></script>
+            <!-- Compiled and minified JavaScript -->
+      <script src="jquery-3.2.1.min.js"></script>
+   </head>
+
+   <body>
+   	
+   	<h1>SunRunr</h1>
+   	<h2>Register Your Device</h2>
+	
+	<form>
+		<div class="inputBox">
+	   		<label for="deviceID">Device Id</label>
+	   		<input type="text" name="deviceID" id="deviceID">
+   		</div>
+   			
+   		<div class="inputBox">
+	   		<label for="userEmail">Email Address</label>
+	   		<input type="email" name="userEmail" id="userEmail">
+   		</div>
+   		
+   		<input type="submit" id="regDevice" value="Register Device">
+	</form>	
+	
+	
+	<div id="deviceError"></div>
+   	
+   </body>
+</html>
