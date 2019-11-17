@@ -26,7 +26,7 @@ router.post('/signin', function(req, res, next) {
          }
          else if(valid) {
             var authToken = jwt.encode({email: req.body.email}, secret);
-            //JSON might want a redirect to loggedIn
+            //Redirects to account.html (add "redirect:"/account.html")
             res.status(201).json({success:true, authToken: authToken});
          }
          else {
@@ -57,7 +57,7 @@ router.post('/register', function(req, res, next) {
              res.status(400).json({success : false, message : err.errmsg});
           }
           else {
-             res.status(201).json({success : true, message : user.fullName + "has been created"});
+             res.status(201).json({success : true, message : user.fullName + "has been created", redirect: "/signin.html"});
           }
         });
       }
