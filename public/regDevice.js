@@ -13,7 +13,7 @@ function registerDevice(){
 		   data: JSON.stringify(deviceInfo),
 		   dataType: 'json'
 		  })
-		    .done(deivceNowRegistered)
+		    .done(deviceNowRegistered)
 		    .fail(registerError);
 }	
 	
