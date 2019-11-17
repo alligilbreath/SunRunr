@@ -20,7 +20,7 @@ function registerDevice(){
 	
 function deviceNowRegistered(data, textStatus, jqXHR){
 	window.alert(jqXHR.responseJSON.message);
-	
+	window.location = "userPage.html";
 }
 
 function registerError(jqXHR, textStatus, errorThrown){
