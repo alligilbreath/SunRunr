@@ -1,5 +1,5 @@
 
-function registerDevice{
+function registerDevice(){
 	
 	let deviceID = $("#deviceID").value();
 	let userEmail = $("#userEmail").value();
@@ -7,7 +7,7 @@ function registerDevice{
 	let deviceInfo = {deviceId: deviceID, email: userEmail};
 	
 	  $.ajax({
-		   url: "/device/register", //TODO: Clarify actual url endpoint
+		   url: "/devices/register", //TODO: Clarify actual url endpoint
 		   method: 'POST',
 		   contentType: 'application/json',
 		   data: JSON.stringify(deviceInfo),
