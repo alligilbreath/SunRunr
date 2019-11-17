@@ -44,7 +44,7 @@ $(function() {
   // TODO: rewrite this, as this was taken from Holz example, and review user authentication chapter on Zybooks
   // Redirect user to their page if they haven't closed their window yet (I think...?)
   if( window.localStorage.getItem('authToken')) { 
-    window.location.replace('userPage.html');
+    window.location = 'userPage.html';
   }
   
   else {
@@ -61,7 +61,7 @@ $(function() {
 
     // Redirect user to create a new account when clicked on the Make a New Account button
     $("#newAcc").click(function(){
-    	window.location.replace("signup.html");
+    	window.location = "signup.html";
     });
   }
 });
