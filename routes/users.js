@@ -8,7 +8,7 @@ let bcrypt = require("bcryptjs");
 let jwt = require("jwt-simple");
 
 /* Authenticate user */
-var secret = fs.readFileSync(__dirname + '/../../jwtkey').toString();
+var secret = fs.readFileSync(__dirname + '/jwtkey').toString();
 
 //Sign in a user
 router.post('/signin', function(req, res, next) {
