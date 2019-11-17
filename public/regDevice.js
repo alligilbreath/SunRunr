@@ -1,8 +1,8 @@
 
 function registerDevice(){
 	
-	let deviceID = $("#deviceID").value();
-	let userEmail = $("#userEmail").value();
+	let deviceID = $("#deviceID").val();
+	let userEmail = $("#userEmail").val();
 	
 	let deviceInfo = {deviceId: deviceID, email: userEmail};
 	
