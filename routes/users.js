@@ -60,7 +60,7 @@ router.post('/register', function(req, res, next) {
           }
           else {
             console.log("User created");
-             res.status(201).json({success : true, message : user.fullName + "has been created", redirect: "/login.html"});
+             res.status(201).json({success : true, message : user.fullName + "has been created"});
           }
         });
       }
