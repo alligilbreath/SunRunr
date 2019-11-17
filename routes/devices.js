@@ -303,7 +303,7 @@ router.post('/sunRun', function(req, res) {
 										// 	res.status(201).send(JSON.stringify(responseJson))
 										// }
 										//else{
-											console.log("Data does not warrent an alert");
+											//console.log("Data does not warrent an alert");
 											responseJson.status = "NoAlert";
 											res.status(201).send(JSON.stringify(responseJson))
 										//}
@@ -312,8 +312,9 @@ router.post('/sunRun', function(req, res) {
 							}
 							catch(er)
 							{
+                responseJson.status = "Not enough data, recorded though";
 								res.status(201).send(JSON.stringify(responseJson));
-								responseJson.status = "Not enough data, recorded though";
+
 							}
 						}
 					});
