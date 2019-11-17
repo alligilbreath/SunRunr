@@ -7,7 +7,7 @@ function showData(){
 	
 	
 	$.ajax({
-	   url: "/devices/sensorData", //TODO: Clarify actual url endpoint
+	   url: "/devices/sunRun", //TODO: Clarify actual url endpoint
 	   method: 'GET',
 	   contentType: 'application/json',
 	   data: JSON.stringify(deviceId),
@@ -15,7 +15,6 @@ function showData(){
 	})
 		    .done(displayData)
 		    .fail(showError);
-	
 	
 }
 
