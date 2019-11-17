@@ -45,7 +45,7 @@ router.post('/hit', function(req, res, next) {
       }
       else {
         // Create a new hw data with user email time stamp
-        var newHwData = new deviceData({
+        var newDeviceData = new deviceData({
           userEmail: device.userEmail,
           deviceid: req.body.deviceId,
           longitude: req.body.longitude,
@@ -53,7 +53,7 @@ router.post('/hit', function(req, res, next) {
         });
 
         // Save device. If successful, return success. If not, return error message.
-        newHwData.save(function(err, newHwData) {
+        deviceData.save(function(err, newDeviceData) {
           if (err) {
             responseJson.status = "ERROR";
             responseJson.message = "Error saving data in db.";
