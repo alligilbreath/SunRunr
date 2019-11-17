@@ -305,7 +305,7 @@ router.post('/sunRun', function(req, res) {
 										//else{
 											//console.log("Data does not warrent an alert");
 											responseJson.status = "NoAlert";
-											res.status(201).send(JSON.stringify(responseJson))
+											res.status(201).send(data)
 										//}
 									}
 								});
