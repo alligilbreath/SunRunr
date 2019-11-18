@@ -22,12 +22,12 @@ function showData(){
 function displayData(data, textStatus, jqXHR){
 
 	// longitude, letitude,
-	console.log(data);
+	console.log(data[data.length - 1]);
 	let dataDispl = "<ul>" +
-	"<li>" + (data[-1].longitude).toString() + "</li>" +
-	"<li>" + (data[-1].latitude).toString() + "</li>" +
-	"<li>" + (data[-1].speed).toString() + "</li>" +
-	"<li>" + (data[-1].uvIndex).toString() + "</li>" +
+	"<li>" + (data[data.length - 1].longitude).toString() + "</li>" +
+	"<li>" + (data[data.length - 1].latitude).toString() + "</li>" +
+	"<li>" + (data[data.length - 1].speed).toString() + "</li>" +
+	"<li>" + (data[data.length - 1].uvIndex).toString() + "</li>" +
 	"</ul>";
 
 	$("#dataDispl").html(dataDispl);
