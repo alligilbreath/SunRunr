@@ -82,6 +82,7 @@ router.post('/sensorData', function(req, res, next){
 		}
 		else{
       console.log("/sensor data sent back");
+      console.log(data);
 			res.status(201).send(JSON.stringify(data));
 		}
 	});
@@ -290,36 +291,39 @@ router.post('/sunRun', function(req, res) {
 							res.status(201).send(JSON.stringify(responseJson));
 						}
 						else {
-							try{
-                //See if with new data warrants an alert
-								deviceData.find({"deviceId": req.body.deviceId}).exec(function(err1, data)
-								{
-									if (err1) {
-										res.status(201).json({ error: "Database findOne error" });
-									}
-									else
-									{
-                    //TODO: Account for threshold
-										// if(data[0].uvIndex >50 && data[1].uvIndex >50 && data[2].uvIndex >50)
-										// {
-										// 	responseJson.status = "Alert";
-										// 	res.status(201).send(JSON.stringify(responseJson))
-										// }
-										//else{
-											//console.log("Data does not warrent an alert");
-                      console.log("yoohoo");
-											responseJson.status = "NoAlert";
-											res.status(201).send(JSON.stringify(data))
-										//}
-									}
-								});
-							}
-							catch(er)
-							{
-                responseJson.status = "Not enough data, recorded though";
-								res.status(201).send(JSON.stringify(responseJson));
-
-							}
+              console.log("yoohoo");
+              responseJson.status = "NoAlert";
+              res.status(201).send(JSON.stringify(data))
+							// try{
+              //   //See if with new data warrants an alert
+							// 	deviceData.find({"deviceId": req.body.deviceId}).exec(function(err1, data)
+							// 	{
+							// 		if (err1) {
+							// 			res.status(201).json({ error: "Database findOne error" });
+							// 		}
+							// 		else
+							// 		{
+              //       //TODO: Account for threshold
+							// 			// if(data[0].uvIndex >50 && data[1].uvIndex >50 && data[2].uvIndex >50)
+							// 			// {
+							// 			// 	responseJson.status = "Alert";
+							// 			// 	res.status(201).send(JSON.stringify(responseJson))
+							// 			// }
+							// 			//else{
+							// 				//console.log("Data does not warrent an alert");
+              //         console.log("yoohoo");
+							// 				responseJson.status = "NoAlert";
+							// 				res.status(201).send(JSON.stringify(data))
+							// 			//}
+							// 		}
+							// 	});
+							// }
+							// catch(er)
+							// {
+              //   responseJson.status = "Not enough data, recorded though";
+							// 	res.status(201).send(JSON.stringify(responseJson));
+              //
+							// }
 						}
 					});
 			}

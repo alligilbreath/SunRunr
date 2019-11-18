@@ -22,6 +22,7 @@ function showData(){
 function displayData(data, textStatus, jqXHR){
 
 	// longitude, letitude,
+	console.log(data);
 	let dataDispl = "<ul>" +
 	"<li>" + (data.longitude).toString() + "</li>" +
 	"<li>" + (data.latitude).toString() + "</li>" +
