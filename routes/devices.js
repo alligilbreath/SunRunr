@@ -73,13 +73,16 @@ router.get('/myDevices', function(req, res, next){
 });
 
 //Get all sensor data for deviceId query
-router.get('/sensorData', function(req, res, next){
-	deviceData.find({"deviceId": req.query.deviceId}).exec(function(err,data){
+router.post('/sensorData', function(req, res, next){
+  console.log("in sensor data")
+	deviceData.find({"deviceId": req.body.deviceId}).exec(function(err,data){
 		if(err){
+      console.log("/sensor data error");
 			res.send("Error has occured");
 		}
 		else{
-			res.json(data);
+      console.log("/sensor data sent back");
+			res.status(201).send(JSON.stringify(data));
 		}
 	});
 });
@@ -304,6 +307,7 @@ router.post('/sunRun', function(req, res) {
 										// }
 										//else{
 											//console.log("Data does not warrent an alert");
+                      console.log("yoohoo");
 											responseJson.status = "NoAlert";
 											res.status(201).send(JSON.stringify(data))
 										//}
