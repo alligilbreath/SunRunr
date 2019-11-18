@@ -296,7 +296,7 @@ router.post('/sunRun', function(req, res) {
               // //res.status(201).send(JSON.stringify(uvData))
 							try{
                 //See if with new data warrants an alert
-								deviceData.find({"deviceId": req.body.deviceId}).exec(function(err1, data)
+								deviceData.find({"deviceId": req.body.deviceId}).limit(1).exec(function(err1, data)
 								{
 									if (err1) {
 										res.status(201).json({ error: "Database findOne error" });
