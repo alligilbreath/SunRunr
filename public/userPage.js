@@ -22,7 +22,7 @@ function showData(){
 function displayData(data, textStatus, jqXHR){
 
 	// longitude, letitude,
-	
+
 	let dataDispl = "<ul>" +
 	"<li>" + data.longitude + "</li>" +
 	"<li>" + data.latitude + "</li>" +
@@ -30,7 +30,7 @@ function displayData(data, textStatus, jqXHR){
 	"<li>" + data.uvIndex + "</li>" +
 	"</ul>";
 
-	$("dataDispl").html(dataDispl);
+	$("#dataDispl").html(dataDispl);
 }
 
 function showError(jqXHR, textStatus, errorThrown){
