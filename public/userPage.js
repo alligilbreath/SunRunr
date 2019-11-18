@@ -23,10 +23,10 @@ function displayData(data, textStatus, jqXHR){
 
 	// longitude, letitude,
 	let dataDispl = "<ul>" +
-	"<li>" + str(data.longitude) + "</li>" +
-	"<li>" + str(data.latitude) + "</li>" +
-	"<li>" + str(data.speed) + "</li>" +
-	"<li>" + str(data.uv) + "</li>" +
+	"<li>" + (data.longitude).toString() + "</li>" +
+	"<li>" + (data.latitude).toString() + "</li>" +
+	"<li>" + (data.speed).toString() + "</li>" +
+	"<li>" + (data.uvIndex).toString() + "</li>" +
 	"</ul>";
 
 	$("#dataDispl").html(dataDispl);
