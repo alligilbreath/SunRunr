@@ -81,8 +81,8 @@ router.post('/sensorData', function(req, res, next){
 			res.send("Error has occured");
 		}
 		else{
-      console.log("/sensor data sent back");
-      console.log(data);
+    //  console.log("/sensor data sent back");
+      //console.log(data);
 			res.status(201).send(JSON.stringify(data));
 		}
 	});
@@ -311,7 +311,7 @@ router.post('/sunRun', function(req, res) {
 										// }
 										//else{
 											//console.log("Data does not warrent an alert");
-                      console.log("yoohoo");
+                    //  console.log("yoohoo");
 											responseJson.status = "NoAlert";
 											res.status(201).send(JSON.stringify(data))
 										//}
