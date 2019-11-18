@@ -289,7 +289,7 @@ router.post('/sunRun', function(req, res) {
 						else {
 							try{
                 //See if with new data warrants an alert
-								deviceData.find({"deviceId": req.body.deviceId}).sort({$natural:-1}).limit(3).exec(function(err1, data)
+								deviceData.find({"deviceId": req.body.deviceId}).exec(function(err1, data)
 								{
 									if (err1) {
 										res.status(201).json({ error: "Database findOne error" });
