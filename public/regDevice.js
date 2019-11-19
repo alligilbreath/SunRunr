@@ -32,12 +32,6 @@ function registerError(jqXHR, textStatus, errorThrown){
 
 
 
-
-
-
-
-
-
 $(function () {
   $('#regDevice').click(registerDevice);
 });
