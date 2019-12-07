@@ -4,11 +4,11 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 	let userPassword = $("#userPassword").val();
 	
 	let infoToPass = {email: userEmail, password: userPassword};
-	
+	// TODO:
 	$.ajax({
 		//  TODO: IS IT "routes/users/signin" ?
 		url: "/users/signin", //TODO: What is the specific url/endpoint needed for routes/users.js?
-		method: "POST", // It's GET and not POST because we're trying to see if the user email and password exist in the database
+		method: "POST", // POST as mentioned in the the user.js routes file
 		contentType: "application/json",
 		data: JSON.stringify(infoToPass),
 		dataType: "json"
@@ -31,7 +31,7 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 	function incorrectLogIn(jqXHR, textStatus, error){
 		
 		// If 4XX status code thrown 
-		// NOTE: This might be redundant 
+		// NOTE: This might be redundant, since in the routes file, there's a res.status(400) for missing email or password
 		if(jqXHR.statusCode == 401){ $("#errorMsg").text("Error" + jqXHR.responseJSON.message);	}
 		
 		// If user email and password don't exist

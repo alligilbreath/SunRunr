@@ -49,5 +49,9 @@ $(function () {
 
 	$('#regDevicePage').click(toDevicePage);
 
-
+	// This is for the user to log out of their account
+	$("#logOut").click(function(){
+		window.localStorage.removeItem('authToken'); // This is to remove the authToken
+		window.location = "login.html";
+	});
 });

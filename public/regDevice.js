@@ -4,6 +4,7 @@ function registerDevice(){
 	let deviceID = $("#deviceID").val();
 	let userEmail = $("#userEmail").val();
 	
+	
 	console.log("Checking if something was entered in textboxes");
 	if(deviceID.length == 0   && userEmail.length == 0){
 		$("deviceError").text("Please enter your deive ID and email");
@@ -39,8 +40,11 @@ function registerError(jqXHR, textStatus, errorThrown){
 
 
 
-
-
 $(function () {
   $('#regDevice').click(registerDevice);
+  
+  $('#returnUserPage').click(function(){
+	window.location.replace("userPage.html");
+  });
+  
 });
