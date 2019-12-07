@@ -4,6 +4,15 @@ function registerDevice(){
 	let deviceID = $("#deviceID").val();
 	let userEmail = $("#userEmail").val();
 	
+	console.log("Checking if something was entered in textboxes");
+	if(deviceID.length == 0   && userEmail.length == 0){
+		$("deviceError").text("Please enter your deive ID and email");
+		console.log("No email or device Id");
+		return;
+	}
+
+
+
 	let deviceInfo = {deviceId: deviceID, email: userEmail};
 	
 	  $.ajax({

@@ -30,7 +30,8 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 	// This function is called when user email or password do NOT exist in database, warning user to retype email and password again
 	function incorrectLogIn(jqXHR, textStatus, error){
 		
-		// If 4XX status code thrown
+		// If 4XX status code thrown 
+		// NOTE: This might be redundant 
 		if(jqXHR.statusCode == 401){ $("#errorMsg").text("Error" + jqXHR.responseJSON.message);	}
 		
 		// If user email and password don't exist
