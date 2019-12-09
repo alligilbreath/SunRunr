@@ -8,7 +8,7 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 	$.ajax({
 		//  TODO: IS IT "routes/users/signin" ?
 		url: "/users/signin", //TODO: What is the specific url/endpoint needed for routes/users.js?
-		method: "POST", // POST as mentioned in the the user.js routes file
+		type: "POST", // POST as mentioned in the the user.js routes file
 		contentType: "application/json",
 		data: JSON.stringify(infoToPass),
 		dataType: "json"
@@ -66,10 +66,13 @@ $(function() {
     // Verify user email and password when Log In button is clicked
     $("#submit").click(verifyLogIn); 
 
-    // Redirect user to create a new account when clicked on the Make a New Account button
-    // $("#newAcc").click(function(){
-    // 	window.location = "signup.html";
-    // });
+
+
+	// Don't need below since There now is a link tag (<a>)
+    /* Redirect user to create a new account when clicked on the Make a New Account button
+     $("#newAcc").click(function(){
+     	window.location = "signup.html";
+     });*/
   }
 });
 

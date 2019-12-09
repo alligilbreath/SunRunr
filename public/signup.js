@@ -7,11 +7,12 @@ function sendRegisterRequest() {
   
   // Check to make sure the passwords match
   if (password != passwordConfirm) {
-    $('#errorMsg2').text("Passwords do not match");
+    $('#ServerResponse').text("Passwords do not match");
+    $('#ServerResponse').show();
     return;
   }
   
-  // TODO: Make regEx to check if password is strong
+  // TODO: Check if RegEx below works properly
   // Could make password have at least one upper case letter, one lower case letter, at least one number, and at least one random character 
   // ex: Jello1#, H4p&py, $2Meep, HELlo432%
   let goodPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/;
@@ -28,7 +29,8 @@ function sendRegisterRequest() {
 	  "</ul>" +
 	  "ie) Jello1#, H4p&py, $2Meep, HELlo432%";
 	  
-	  $("#errorMsg2").html(passwordNeeded);
+    $("#ServerResponse").text(passwordNeeded);
+    $("#ServerResponse").show();
 	  return;
   }
   
@@ -52,25 +54,23 @@ function sendRegisterRequest() {
 
 function makeNewAcc(data, textStatus, jqXHR) {
 	
-	$("#errorMsg2").html("<span style='color: green'>" + jqXHR.responseJSON.message + "</span>");
-	
+	$("#ServerResponse").html("<span style='color: green'>" + jqXHR.responseJSON.message + "</span>");
+	$("#ServerResponse").show();
 	// Is it same as from login.js?
 	//TODO: Under router.post('/register'...){...} of routes/user.js, shouldn't there be an authToken?
 	window.localStorage.setItem('authToken', data.authToken);
-	window.location = "login.html"; // Taken back to login where they can 
+	window.location = "userPage.html"; // Taken back to login where they can TODO: Should remove this and jsut take user to their account page
 }
 
 function registerError(jqXHR, textStatus, errorThrown) {
-	$("#errorMsg2").text("Error: " + jqXHR.responseJSON.message);
-}
-
-
-function goBackHome(){
-	window.location = "login.html";
+  $("#ServerResponse").text("Error: " + jqXHR.responseJSON.message);
+  $("#ServerResponse").show();
 }
 
 
 $(function () {
   $('#signUp').click(sendRegisterRequest);
-  $("#homePage").click(goBackHome);
+  $("#homePage").click(function(){
+    window.location = "login.html";
+  });
 });

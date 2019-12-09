@@ -2,16 +2,64 @@
 <html lang="en">
    <head>
       <meta charset="UTF-8">
-      <title>SunRunr - Home/Log In</title>
-      <link href="stylesheets/style.css" rel="stylesheet">
+      <title>SunRunr - Log In</title>
+	
+	  <!-- Import jQuery -->
+	  <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	  <!-- Import Google Icon Font -->
+	  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	  <!-- Compiled and minified CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+      <!-- Compiled and minified JavaScript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>	  
+	 
+	 
+	  <link href="stylesheets/style.css" rel="stylesheet">
       <script src="login.js" defer></script>
-            <!-- Compiled and minified JavaScript -->
-	  <script src="jquery-3.2.1.min.js"></script>
+
 	  <meta name="viewport" content="width=device-width, initial-scale=1">
    </head>
 
    <body>
-	   
+	   <div class="#607d8b blue-grey background">
+			
+			<nav>
+			 <div class="nav-wrapper #f57c00 orange darken-2">
+			  <span id="siteTitle">SunRunr</span>
+			 </div>
+			</nav>
+
+			<div class="row">
+			  <div class="col s12 m6">
+				  <div class="card #ff9800 orange ">
+					<div class="card-content white-text">
+						<span class="card-title">Log In</span>
+						
+						<div class="input-field">
+						  <label for="email">Email</label>
+						  <input type="email" id="email" name="email" >
+						</div>
+						
+						<div class="input-field">
+						  <label for="password">Password</label>
+						  <input type="password" id="password" name="password" >	
+						</div>
+							
+						<div class="card-action">
+							<div><button id="submit" class="waves-effect waves-light btn">Log In</button></div>
+							<div id="account">Don't have an account? <a href="signup.html" class="#000000 black">Register NOW!</a></div>
+						</div>
+
+					</div>
+				  <div class="card-panel red-text" id="ServerResponse" style="display: none"></div>
+			  </div>
+			</div>
+
+		</div>
+	</body>
+
+
+	<!-- Old code   
 	<div class="titleContainer"> <h1>SunRunr</h1> </div>
 
 	<div class="logIn-Container">   
@@ -34,13 +82,13 @@
 			
 			<div class="newAccount">
 				Don't have an account? <a href="signup.html">Register NOW!</a>
-				<!--<input type="button" id="newAcc" value="Make a New Account">-->
+				<input type="button" id="newAcc" value="Make a New Account">
 			</div>
 					
 		</div>
 
    	
    	<div id="errorMsg"></div>
-   	
-   </body>
+	
+   </body>-->
 </html>
