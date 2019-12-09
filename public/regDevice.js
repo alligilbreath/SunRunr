@@ -20,6 +20,7 @@ function registerDevice(){
 		   url: "/devices/register", //TODO: Clarify actual url endpoint
 		   method: 'POST',
 		   contentType: 'application/json',
+		   headers: { 'x-auth': window.localStorage.getItem("authToken") },
 		   data: JSON.stringify(deviceInfo),
 		   dataType: 'json'
 		  })

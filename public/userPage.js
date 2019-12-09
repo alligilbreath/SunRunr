@@ -10,6 +10,7 @@ function showData(){
 	   url: "/devices/sensorData", //TODO: Clarify actual url endpoint
 	   method: 'POST',
 	   contentType: 'application/json',
+	   headers: { 'x-auth': window.localStorage.getItem("authToken") },
 	   data: JSON.stringify(deviceId),
 	   dataType: 'json'
 	})
@@ -45,13 +46,21 @@ function toDevicePage(){
 
 $(function () {
 
+	// This is to take user back to login page if they haven't logged in yet
+	// TODO: Should I just follow/ copy and paste Lysecky's account.js code?
+	if(!window.localStorage('authToken')){
+		window.location = "login.html";
+	}
+
 	$("#showData").click(showData);
 
 	$('#regDevicePage').click(toDevicePage);
 
+
 	// This is for the user to log out of their account
-	$("#logOut").click(function(){
-		window.localStorage.removeItem('authToken'); // This is to remove the authToken
-		window.location = "login.html";
-	});
+	 $("#logOut").click(function(){
+	 	window.localStorage.removeItem('authToken'); // This is to remove the authToken
+	 	window.location = "login.html"; // Take user back to log in page
+	 });
+
 });

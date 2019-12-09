@@ -1,15 +1,63 @@
+.titleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
 h1 {
-	
+    
+    margin: 5px;
+    width: 50px;
+}
+
+.logIn-Container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: left;
+
 }
 
 .logIn {
-	
+    background-color: #FC9C54;
+    width: 40vw;
+    height: 80%;
+    padding:10px;
+    border: outset #FD5E53;
+    border-radius: 10px;
 }
 
 .inputBox {
-	
+    margin:10px;
+}
+
+#email, #userPassword{
+    width: 70%;
+}
+
+#submit {
+    margin:5px;
+}
+
+/* #newAccount{
+
+} */
+
+#newAcc {
+    width:40%;
 }
 
 #errorMsg{
-	
+	display: none;
+}
+
+
+
+@media all and (max-width: 400px){
+    .logIn {
+        width: 50vw;
+    }
+
 }

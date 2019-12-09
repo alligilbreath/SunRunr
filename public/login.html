@@ -6,36 +6,39 @@
       <link href="stylesheets/style.css" rel="stylesheet">
       <script src="login.js" defer></script>
             <!-- Compiled and minified JavaScript -->
-      <script src="jquery-3.2.1.min.js"></script>
+	  <script src="jquery-3.2.1.min.js"></script>
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
    </head>
 
    <body>
-   	
-   	<h1>SunRunr</h1>
-   	
-   	<div class="logIn">
-   		Log In
-   		
-   		<form>
-   			<div class="inputBox">
-	   			<label for="email">Email</label>
-	   			<input type="text" name="email" id="email">
-   			</div>
-   			
-   			<div class="inputBox">
-	   			<label for="userPassword">Password</label>
-	   			<input type="password" name="userPassword" id="userPassword">
-   			</div>
-   			
-   			<input type="submit" id="submit" value="Log In">
-   		</form>
-   		
-   		
-   	</div>
-   	
-   	<div class="newAccount">
-		<input type="button" id="newAcc" value="Make a New Account">
-   	</div>
+	   
+	<div class="titleContainer"> <h1>SunRunr</h1> </div>
+
+	<div class="logIn-Container">   
+		<div class="logIn">
+			Log In
+			
+			<form>
+				<div class="inputBox">
+					<label for="email">Email</label>
+					<input type="text" name="email" id="email">
+				</div>
+				
+				<div class="inputBox">
+					<label for="userPassword">Password</label>
+					<input type="password" name="userPassword" id="userPassword">
+				</div>
+				
+				<input type="submit" id="submit" value="Log In">
+			</form>
+			
+			<div class="newAccount">
+				Don't have an account? <a href="signup.html">Register NOW!</a>
+				<!--<input type="button" id="newAcc" value="Make a New Account">-->
+			</div>
+					
+		</div>
+
    	
    	<div id="errorMsg"></div>
    	

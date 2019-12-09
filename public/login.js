@@ -32,10 +32,16 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 		
 		// If 4XX status code thrown 
 		// NOTE: This might be redundant, since in the routes file, there's a res.status(400) for missing email or password
-		if(jqXHR.statusCode == 401){ $("#errorMsg").text("Error" + jqXHR.responseJSON.message);	}
+		if(jqXHR.statusCode == 401){ 
+			$("#errorMsg").text("Error" + jqXHR.responseJSON.message);	
+			$("#errorMsg").show();
+		}
 		
 		// If user email and password don't exist
-		else{ $("#errorMsg").text("Error" + jqXHR.responseJSON.message); }
+		else{ 
+			$("#errorMsg").text("Error" + jqXHR.responseJSON.message); 
+			$("#errorMsg").show();
+		}
 	}
 	
 
@@ -51,7 +57,7 @@ $(function() {
   else {
 	  
 	// This is if user decides to press enter while on password textbox
-    $('#UserPassword').keypress(function(event) {
+    $('#userPassword').keypress(function(event) {
         if( event.which === 13 ) { // event.which = 13 --> checks if enter key was pressed (while on password textbox)
            verifyLogIn();
         }
@@ -61,9 +67,9 @@ $(function() {
     $("#submit").click(verifyLogIn); 
 
     // Redirect user to create a new account when clicked on the Make a New Account button
-    $("#newAcc").click(function(){
-    	window.location = "signup.html";
-    });
+    // $("#newAcc").click(function(){
+    // 	window.location = "signup.html";
+    // });
   }
 });
 
