@@ -1,6 +1,5 @@
-var PLEASEGODWORK = "PLEASE WORK";
 
-
+///////////////////////////////////////////////////////////////////////////////////////
 function showData(){
 
 	let deviceId = {deviceId: $("#deviceId").val()};
@@ -37,24 +36,29 @@ function displayData(data, textStatus, jqXHR){
 function showError(jqXHR, textStatus, errorThrown){
 	$("#errorDispl").text("Error: " + jqXHR.responseJSON.message);
 }
+///////////////////////////////////////////////////////////////////////////////////////
 
-
-
-function toDevicePage(){
-	window.location = "regDevice.html";
-}
 
 $(function () {
 
 	// This is to take user back to login page if they haven't logged in yet
-	// TODO: Should I just follow/ copy and paste Lysecky's account.js code?
-	if(!window.localStorage('authToken')){
-		window.location = "login.html";
-	}
+	// if(!window.localStorage.getItem('authToken')){
+	// 	window.location = "login.html";
+	// }
+
+	$('.collapsible').collapsible();
+	$('.dropdown-trigger').dropdown();
+	$('.tabs').tabs(); //duration, onShow, swipeable, responsiveThreshold 
+	// var weeklySummary = M.Tabs.init(document.getElementById('weekSummary'));
+	// weeklySummary.select('weekSummary');
+
 
 	$("#showData").click(showData);
 
-	$('#regDevicePage').click(toDevicePage);
+
+	$('#regDevicePage').click(function(){
+		window.location = "regDevice.html";
+	});
 
 
 	// This is for the user to log out of their account
