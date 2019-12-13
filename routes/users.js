@@ -50,7 +50,10 @@ router.post('/register', function(req, res, next) {
         var newUser = new User ({
             email: req.body.email,
             fullName: req.body.fullName,
-            passwordHash: hash
+            passwordHash: hash,
+            lastAccess: Date.now(),
+            userDevices: [],
+            threshold: req.body.threshold
         });
 
         newUser.save(function(err, user) {
@@ -113,6 +116,7 @@ router.get("/account" , function(req, res) {
       return res.status(401).json({success: false, message: "Invalid authentication token."});
    }
 });
+
 
 
 module.exports = router;

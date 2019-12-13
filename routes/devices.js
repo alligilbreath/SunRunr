@@ -4,9 +4,11 @@ let Device = require("../models/device");
 let deviceData = require("../models/deviceData");
 let fs = require('fs');
 let jwt = require("jwt-simple");
+let request = require("request");
 
 /* Authenticate user */
 var secret = fs.readFileSync(__dirname + '/jwtkey').toString();
+
 
 // Function to generate a random apikey consisting of 32 characters
 function getNewApikey() {
@@ -19,6 +21,55 @@ function getNewApikey() {
 
   return newApikey;
 }
+
+//Updates the threshold
+router.post("/setThreshold", function(req, res){
+  if (!req.body.hasOwnProperty("deviceId")) {
+     return res.status(401).json({success: false, message: "Missing deviceId in request"});
+  }
+  else{
+    try {
+      Device.findOne({"deviceId": req.body.deviceId}, function (err, device){
+        if(!err){
+          device.threshold = req.body.threshold;
+          return res.status(200).json(userStatus);
+        }
+        else{
+          return res.status(400).json({success: false, message: "Couldn't find device."})
+        }
+      });
+
+    }
+    catch{
+      return res.status(401).json({success: false, message: "Couldn't change threshold."});
+    }
+  }
+
+});
+
+router.get('/weather', function(req, res, next){
+  let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
+  lastLat = lastData.latitude;
+  lastLong = lastData.longitude;
+  request({
+    method: "GET",
+    uri: "https://samples.openweathermap.org/data/2.5/forecast",
+    qs: {
+      lat: lastLat,
+      log: lastLong,
+      appid: "3471745d22814f7d2209675f54c3ec14"
+    }
+  }, function(err, response, body){
+    var apiRes = JSON.parse(body);
+    var list = apiRes.list;
+    var locals = {
+
+    }
+    res.status(400);
+  });
+
+});
+
 
 // GET request return one or "all" devices registered and last time of contact.
 router.get('/status/:devid', function(req, res, next) {
@@ -78,7 +129,8 @@ router.post('/sensorData', function(req, res, next){
 	deviceData.find({"deviceId": req.body.deviceId}).exec(function(err,data){
 		if(err){
       console.log("/sensor data error");
-			res.send("Error has occured");
+      //wasn't returning a status
+			res.status(400).send("Error has occured");
 		}
 		else{
     //  console.log("/sensor data sent back");
@@ -124,9 +176,11 @@ router.post('/register', function(req, res, next) {
     }
     email = req.body.email;
   }
-
+  //Get threshold from user
+  let user = User.findOne({"email": email});
+  let userThreshold = user.threshold;
   // See if device is already registered
-  Device.findOne({ deviceId: req.body.deviceId }, function(err, device) {
+  Device.findOne({"deviceId": req.body.deviceId }, function(err, device) {
     if (device !== null) {
       responseJson.message = "Device ID " + req.body.deviceId + " already registered.";
       return res.status(400).json(responseJson);
@@ -139,7 +193,21 @@ router.post('/register', function(req, res, next) {
       let newDevice = new Device({
         deviceId: req.body.deviceId,
         userEmail: email,
-        apikey: deviceApikey
+        apikey: deviceApikey,
+        threshold: userThreshold
+      });
+
+      // //See if a user has the email
+      // //Then push the deviceId to the User's device list
+      User.findOne({email: req.body.email}, function(err, user){
+        if(user !== null){
+          conosle.log("Saved user device");
+          user.userDevices.push(req.body.deviceId);
+        }
+        else{
+          responseJson.message = "User does not exist..."
+          return res.status(400).json(responseJson);
+        }
       });
 
       // Save device. If successful, return success. If not, return error message.
@@ -257,10 +325,16 @@ router.post('/sunRun', function(req, res) {
 		responseJson.message = "Request missing time parameter.";
 		res.status(201).send(JSON.stringify(responseJson));
 	}
+  else if(!req.body.hasOwnProperty("status")){
+    responseJson.status = "ERROR";
+    responseJson.message = "Request missing status parameter.";
+    res.status(201).send(JSON.stringify(responseJson));
+  }
 	else {
 		// Find the device by deviceId and API
 			try{
-				Device.find({"deviceId": req.body.deviceId, "apikey": req.body.apikey}).exec(function(err1, data)
+				let deviceUsed = Device.find({"deviceId": req.body.deviceId, "apikey": req.body.apikey});
+        deivceUsed.exec(function(err1, data)
 				{
 					//Device is not in database or there is an error
 					if (err1) {
@@ -274,60 +348,242 @@ router.post('/sunRun', function(req, res) {
 				res.status(401).send(JSON.stringify(responseJson));
 			}
 			//Found deviceId and API key
-					var uvData = new deviceData({
-						deviceId: req.body.deviceId,
-						longitude: req.body.longitude,
-						latitude: req.body.latitude,
-            speed: req.body.speed,
-						uvIndex: req.body.uv,
-						time: req.body.time,
-					});
-					responseJson.message = "UV data recorded";
-          //Save the Data
-						uvData.save(function(err) {
-						if (err) {
-							responseJson.status = "ERROR";
-							responseJson.message = "Error saving data in db." + err;
-							res.status(201).send(JSON.stringify(responseJson));
-						}
-						else {
-              // console.log("yoohoo");
-              // responseJson.status = "NoAlert";
-              // //res.status(201).send(JSON.stringify(uvData))
-							try{
-                //See if with new data warrants an alert
-								deviceData.find({"deviceId": req.body.deviceId}).limit(1).exec(function(err1, data)
-								{
-									if (err1) {
-										res.status(201).json({ error: "Database findOne error" });
-									}
-									else
-									{
-                    //TODO: Account for threshold
-										// if(data[0].uvIndex >50 && data[1].uvIndex >50 && data[2].uvIndex >50)
-										// {
-										// 	responseJson.status = "Alert";
-										// 	res.status(201).send(JSON.stringify(responseJson))
-										// }
-										//else{
-											//console.log("Data does not warrent an alert");
-                    //  console.log("yoohoo");
-											responseJson.status = "NoAlert";
-											res.status(201).send(JSON.stringify(data))
-										//}
-									}
-								});
-							}
-							catch(er)
-							{
-                responseJson.status = "Not enough data, recorded though";
-								res.status(201).send(JSON.stringify(responseJson));
+      //If starting activity then create the deviceData
+      if(req.body.status == "start"){
+        var uvData = new deviceData({
+          deviceId: req.body.deviceId,
+          longitude: req.body.longitude,
+          latitude: req.body.latitude,
+          speed: [],
+          uvIndex: [],
+          duration: 0,
+          startTime: req.body.time,
+          endTime: req.body.time,
+          activity: "nothing yet",
+          humidity: 0,
+          temperature: 0
+        });
+        uvData.speed.push(req.body.speed);
+        uvData.uvIndex.push(req.body.uv);
+        responseJson.message = "UV data recorded";
+        //Save the Data
+          uvData.save(function(err) {
+          if (err) {
+            responseJson.status = "ERROR";
+            responseJson.message = "Error saving data in db." + err;
+            res.status(201).send(JSON.stringify(responseJson));
+          }
+          else {
+            // console.log("yoohoo");
+            // responseJson.status = "NoAlert";
+            // //res.status(201).send(JSON.stringify(uvData))
+            try{
+              //See if with new data warrants an alert
+              deviceData.findOne({"deviceId": req.body.deviceId}).limit(1).exec(function(err1, data)
+              {
+                if (err1) {
+                  res.status(201).json({ error: "Database findOne error" });
+                }
+                else
+                {
+                  //TODO: Account for threshold
+                  let deviceUsed = Device.find({"deviceId": req.body.deviceId, "apikey": req.body.apikey});
+                  if(data.uvIndex[0] > deviceUsed.threshold)
+                  {
+                    responseJson.status = "Alert";
+                    responseJson.threshold = deviceUsed.threshold;
+                    res.status(201).send(JSON.stringify(responseJson));
+                  }
+                  else{
+                    //console.log("Data does not warrent an alert");
+                  //  console.log("yoohoo");
+                    responseJson.status = "NoAlert";
+                    responseJson.threshold = deviceUsed.threshold;
+                    res.status(200).send(JSON.stringify(data));
+                  //}
+                }
+              }});
+            }
+            catch(er)
+            {
+              responseJson.status = "Not enough data, recorded though";
+              responseJson.threshold = deviceUsed.threshold;
+              res.status(201).send(JSON.stringify(responseJson));
 
-							}
-						}
-					});
-			}
-});
+            }
+          }
+        });
+        }
+      //if we're stopping the activity
+      else if (req.body.status == "stop") {
+        deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data){
+          if (err){
+            responseJson.status = "ERROR";
+            responseJson.message = "Error finding activity in db. " + err;
+            res.status(201).send(JSON.stringify(responseJson));
+          }
+          else if(!data){
+            responseJson.status = "ERROR";
+            responseJson.message = "No data." + err;
+            res.status(401).send(JSON.stringify(responseJson));
+          }
+          else{
+            data.longitude = req.body.longitude;
+            data.latitude = req.body.latitude;
+            data.endTime = req.body.time;
+            data.duration = Math.abs(data.endTime - data.startTime);
+            data.speed.push(req.body.speed);
+            data.uvIndex.push(req.body.uv);
+            let total = 0;
+            for(var i = 0; i < data.speed.length; i++){
+              total += data.speed[i];
+            }
+            var speedAvg = total / data.speed.length;
+            //Determine an activity based on average speed
+            if(speedAvg < 5){
+              data.activityType = "walking";
+            }
+            else if(speedAvg < 10){
+              data.activityType = "running";
+            }
+            else{
+              data.activityType = "biking";
+            }
+            var lastLong = data.longitude;
+            var lastLat = data.latitude;
+            //Get humidity and temperature for the activity
+            request({
+              method: "GET",
+              uri: "https://samples.openweathermap.org/data/2.5/weather",
+              qs: {
+                lat: lastLat,
+                log: lastLong,
+                appid: "3471745d22814f7d2209675f54c3ec14"
+              }
+            }, function(err, response, body){
+              var apiRes = JSON.parse(body);
+              data.humidity = apiRes.main.humidity;
+              data.temperature = apiRes.main.temp;
+            });
+            data.save(function(err){
+              if(err){
+                responseJson.status = "ERROR";
+                responseJson.message = "Error updating data in DB" + err;
+                res.status(201).send(JSON.stringify(responseJson));
+              }
+              else{
+                try{
+                  //See if with new data warrants an alert
+                  deviceData.findOne({"deviceId": req.body.deviceId}).limit(1).exec(function(err1, data)
+                  {
+                    if (err1) {
+                      res.status(201).json({ error: "Database findOne error" });
+                    }
+                    else
+                    {
+                      let deviceUsed = Device.findOne({"deviceId": req.body.deviceId});
+                      if(data.uvIndex[data.uvIndex.length] > deviceUsed.threshold)
+                      {
+                        responseJson.status = "Alert";
+                        responseJson.threshold = deviceUsed.threshold;
+                        responseJson.data = data;
+                        res.status(201).send(JSON.stringify(responseJson))
+                      }
+                      else{
+                        //console.log("Data does not warrent an alert");
+                      //  console.log("yoohoo");
+                        responseJson.status = "NoAlert";
+                        res.status(200).send(JSON.stringify(deviceUsed.threshold))
+                      //}
+                    }
+                  }});
+                }
+                catch(er)
+                {
+                  responseJson.status = "Not enough data, recorded though";
+                  responseJson.threshold = deviceUsed.threshold;
+                  res.status(201).send(JSON.stringify(responseJson));
+
+                }
+              }
+            }); //end of saving data
+          } //end of else
+          });
+      } //end of stop status
+      //If we are updating the speed and uvindex values
+      else if (req.body.status == "activity"){
+          deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data){
+            if(err){
+              responseJson.status = "ERROR";
+              responseJson.message = "Error finding activity in db. " + err;
+              res.status(201).send(JSON.stringify(responseJson));
+            }
+            else{
+              if(!data){
+                responseJson.status = "ERROR";
+                responseJson.message = "No data." + err;
+                res.status(201).send(JSON.stringify(responseJson));
+              }
+              else{
+                data.speed.push(req.body.speed);
+                data.uvIndex.push(req.body.uv);
+                data.save(function(err){
+                  if(err){
+                    responseJson.status = "ERROR";
+                    responseJson.message = "Error updating data in DB" + err;
+                    res.status(201).send(JSON.stringify(responseJson));
+                  }
+                  else{
+                    try{
+                      //See if with new data warrants an alert
+                      deviceData.findOne({"deviceId": req.body.deviceId}).limit(1).exec(function(err1, data)
+                      {
+                        if (err1) {
+                          res.status(201).json({ error: "Database findOne error" });
+                        }
+                        else
+                        {
+                          let deviceUsed = Device.findOne({"deviceId": req.body.deviceId});
+                          if(data.uvIndex[data.uvIndex.length] > deviceUsed.threshold)
+                          {
+                            responseJson.status = "Alert";
+                            responseJson.threshold = deviceUsed.threshold;
+                            res.status(201).send(JSON.stringify(responseJson))
+                          }
+                          else{
+                            //console.log("Data does not warrent an alert");
+                          //  console.log("yoohoo");
+                            responseJson.status = "NoAlert";
+                            responseJson.threshold = deviceUsed.threshold;
+                            responseJson.data = data;
+                            res.status(200).send(JSON.stringify(responseJson))
+                          //}
+                        }
+                      }});
+                    }
+                    catch(er)
+                    {
+                      responseJson.status = "Not enough data, recorded though";
+                      responseJson.threshold = deviceUsed.threshold;
+                      responseJson.data = data;
+                      res.status(201).send(JSON.stringify(responseJson));
+
+                    }
+                  }
+                }); //end of saving data
+              } //end of else for saving
+            }//end of no-error else
+          }); // end of find and execute
+      } //end of activity status
+
+      else{
+				responseJson.status = "ERROR";
+				responseJson.message = "Device ID " + req.body.deviceId + " not registered.";
+				res.status(201).send(JSON.stringify(responseJson));
+      }
+
+
+}});
 
 //Delete a device and its deviceData
 router.delete('/deleteDevice', function(req, res){

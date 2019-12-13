@@ -5,12 +5,15 @@ var deviceDataSchema = new db.Schema({
     deviceId: String,
     longitude: String,
     latitude: String,
-    speed: String,
-    uvIndex: String,
+    speed: [Number],
+    uvIndex: [Number],
     //Including time just in case
-    time: String
-    //TODO: Where should threshold be stored? Here or device or user?
-    //TODO: Temperature, humidity, activity(?)
+    startTime: { type: Date, default: Date.now },
+    endTime: {type: Date, default: Date.now},
+    duration: Number,
+    activityType: String,
+    temperature: String,
+    humidity: String
 });
 var deviceData = db.model("deviceData", deviceDataSchema);
 module.exports = deviceData;
