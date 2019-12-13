@@ -22,6 +22,7 @@ function getNewApikey() {
   return newApikey;
 }
 
+//Updates the threshold
 router.post("/setThreshold", function(req, res)){
   if (!req.body.hasOwnProperty("deviceId")) {
      return res.status(401).json({success: false, message: "Missing deviceId in request"});
@@ -45,6 +46,29 @@ router.post("/setThreshold", function(req, res)){
   }
 
 }
+
+router.get('/weather', function(req, res, next){
+  let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
+  lastLat = lastData.latitude;
+  lastLong = lastData.longitude;
+  request({
+    method: "GET",
+    uri: "https://samples.openweathermap.org/data/2.5/forecast",
+    qs: {
+      lat: lastLat,
+      log: lastLong,
+      appid: "3471745d22814f7d2209675f54c3ec14"
+    }
+  }, function(err, response, body){
+    var apiRes = JSON.parse(body);
+    var list = apiRes.list;
+    var locals = {
+
+    }
+    res.status(400);
+  });
+
+});
 
 
 // GET request return one or "all" devices registered and last time of contact.
@@ -152,9 +176,11 @@ router.post('/register', function(req, res, next) {
     }
     email = req.body.email;
   }
-
+  //Get threshold from user
+  let user = User.findOne({"email": email});
+  let userThreshold = user.threshold;
   // See if device is already registered
-  Device.findOne({ deviceId: req.body.deviceId }, function(err, device) {
+  Device.findOne({"deviceId": req.body.deviceId }, function(err, device) {
     if (device !== null) {
       responseJson.message = "Device ID " + req.body.deviceId + " already registered.";
       return res.status(400).json(responseJson);
@@ -167,22 +193,22 @@ router.post('/register', function(req, res, next) {
       let newDevice = new Device({
         deviceId: req.body.deviceId,
         userEmail: email,
-        apikey: deviceApikey
+        apikey: deviceApikey,
+        threshold: userThreshold;
       });
 
-      //TODO: Do we need this?
       // //See if a user has the email
       // //Then push the deviceId to the User's device list
-      // User.findOne({email: req.body.email}, function(err, user)){
-      //   if(user !== null){
-      //     conosle.log("Saved user device");
-      //     user.userDevices.push(req.body.deviceId);
-      //   }
-      //   else{
-      //     responseJson.message = "User does not exist..."
-      //     return res.status(400).json(responseJson);
-      //   }
-      // });
+      User.findOne({email: req.body.email}, function(err, user)){
+        if(user !== null){
+          conosle.log("Saved user device");
+          user.userDevices.push(req.body.deviceId);
+        }
+        else{
+          responseJson.message = "User does not exist..."
+          return res.status(400).json(responseJson);
+        }
+      });
 
       // Save device. If successful, return success. If not, return error message.
       newDevice.save(function(err, newDevice) {
@@ -365,12 +391,14 @@ router.post('/sunRun', function(req, res) {
                   if(data.uvIndex[0] > deviceUsed.threshold)
                   {
                     responseJson.status = "Alert";
+                    responseJson.threshold = deviceUsed.threshold;
                     res.status(201).send(JSON.stringify(responseJson))
                   }
                   else{
                     //console.log("Data does not warrent an alert");
                   //  console.log("yoohoo");
                     responseJson.status = "NoAlert";
+                    responseJson.threshold = deviceUsed.threshold;
                     res.status(200).send(JSON.stringify(data))
                   //}
                 }
@@ -379,6 +407,7 @@ router.post('/sunRun', function(req, res) {
             catch(er)
             {
               responseJson.status = "Not enough data, recorded though";
+              responseJson.threshold = deviceUsed.threshold;
               res.status(201).send(JSON.stringify(responseJson));
 
             }
@@ -427,7 +456,7 @@ router.post('/sunRun', function(req, res) {
             //Get humidity and temperature for the activity
             request({
               method: "GET",
-              uri: "",
+              uri: "https://samples.openweathermap.org/data/2.5/weather",
               qs: {
                 lat: lastLat,
                 log: lastLong,
@@ -458,13 +487,15 @@ router.post('/sunRun', function(req, res) {
                       if(data.uvIndex[data.uvIndex.length] > deviceUsed.threshold)
                       {
                         responseJson.status = "Alert";
+                        responseJson.threshold = deviceUsed.threshold;
+                        responseJson.data = data;
                         res.status(201).send(JSON.stringify(responseJson))
                       }
                       else{
                         //console.log("Data does not warrent an alert");
                       //  console.log("yoohoo");
                         responseJson.status = "NoAlert";
-                        res.status(200).send(JSON.stringify(data))
+                        res.status(200).send(JSON.stringify(deviceUsed.threshold))
                       //}
                     }
                   });
@@ -472,6 +503,7 @@ router.post('/sunRun', function(req, res) {
                 catch(er)
                 {
                   responseJson.status = "Not enough data, recorded though";
+                  responseJson.threshold = deviceUsed.threshold;
                   res.status(201).send(JSON.stringify(responseJson));
 
                 }
@@ -518,13 +550,16 @@ router.post('/sunRun', function(req, res) {
                           if(data.uvIndex[data.uvIndex.length] > deviceUsed.threshold)
                           {
                             responseJson.status = "Alert";
+                            responseJson.threshold = deviceUsed.threshold;
                             res.status(201).send(JSON.stringify(responseJson))
                           }
                           else{
                             //console.log("Data does not warrent an alert");
                           //  console.log("yoohoo");
                             responseJson.status = "NoAlert";
-                            res.status(200).send(JSON.stringify(data))
+                            responseJson.threshold = deviceUsed.threshold;
+                            responseJson.data = data;
+                            res.status(200).send(JSON.stringify(responseJson))
                           //}
                         }
                       });
@@ -532,6 +567,8 @@ router.post('/sunRun', function(req, res) {
                     catch(er)
                     {
                       responseJson.status = "Not enough data, recorded though";
+                      responseJson.threshold = deviceUsed.threshold;
+                      responseJson.data = data;
                       res.status(201).send(JSON.stringify(responseJson));
 
                     }
@@ -544,7 +581,9 @@ router.post('/sunRun', function(req, res) {
       } //end of activity status
 
       else{
-
+				responseJson.status = "ERROR";
+				responseJson.message = "Device ID " + req.body.deviceId + " not registered.";
+				res.status(201).send(JSON.stringify(responseJson));
       }
 
 
