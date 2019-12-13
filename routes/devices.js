@@ -482,8 +482,10 @@ router.post('/sunRun', function(req, res) {
             else{
               data.activityType = "biking";
             }
-            var lastLong = data.longitude;
-            var lastLat = data.latitude;
+            var lastLong = Math.ceil(data.longitude);
+            var lastLat = Math.ceil(data.latitude);
+            console.log("Last long is " + lastLong);
+            console.log("Last lat is " + lastLat);
             //Get humidity and temperature for the activity
             request({
               method: "GET",
@@ -494,9 +496,14 @@ router.post('/sunRun', function(req, res) {
                 appid: "3471745d22814f7d2209675f54c3ec14"
               }
             }, function(err, response, body){
-              var apiRes = JSON.parse(body);
-              data.humidity = apiRes.main.humidity;
-              data.temperature = apiRes.main.temp;
+              if(err){
+                console.log("API error");
+              }
+              else{
+                var apiRes = JSON.parse(body);
+                data.humidity = apiRes.main.humidity;
+                data.temperature = apiRes.main.temp;
+              }
             });
             data.save(function(err){
               if(err){
