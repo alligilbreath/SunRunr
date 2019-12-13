@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>SunRunr - User Account Page Test</title>
+
+	  <!-- Import jQuery -->
+	  <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	  <!-- Import Google Icon Font -->
+	  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	  <!-- Compiled and minified CSS -->
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	  <!-- Compiled and minified JavaScript -->
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>	  
+
+     <!-- Imports CanvasJS, for the Line Charts -->
+     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
+      <link href="stylesheets/style.css" rel="stylesheet">
+      <script src="userPageTest.js" defer></script>
+      <script src="userPageTest2.js" defer></script>
+      
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+   </head>
+
+   <body>
+    <h1 style="width:100vw">User Account Page Test</h1>
+    <div>Email: <span id="email"></span></div>
+          
+    <div>Name: <span id="fullName"></span></div>
+        
+    <div>Last Access: <span id="lastAccess"></span></div>
+    
+    <div id="2ndJSTest"></div>
+
+    <button id="registerDevice" class="waves-effect waves-light btn">Register</button> 
+
+        <ul class="collapsible">
+              
+            <li>
+             <div class="collapsible-header">Activity Summary</div>
+             <div class="collapsible-body" >
+                <ul class="collection with-header">
+                   <li class="collection-header">
+                      Today's Summary
+                   </li>
+                   <li class="collection-item" style="width:100vw"><div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                   </li>
+                </ul>
+             </div>
+            </li>
+
+        </ul>
+
+        <!--<div class="row">
+            <div class="col s12 m6" style="width:100vw">
+              <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                  <span class="card-title">Speed</span>
+                  <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+                </div>
+                <div class="card-action">
+                  <a href="#">This is a link</a>
+                  <a href="#">This is a link</a>
+                </div>
+              </div>
+            </div>
+          </div>-->
+
+
+
+
+   </body>
+</html>

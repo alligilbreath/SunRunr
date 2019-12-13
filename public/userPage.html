@@ -13,6 +13,10 @@
 	  <!-- Compiled and minified JavaScript -->
 	  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>	  
 
+     <!-- Imports CanvasJS, for the Line Charts -->
+     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
       <link href="stylesheets/style.css" rel="stylesheet">
       <script src="userPage.js" defer></script>
       
@@ -41,9 +45,8 @@
 
 
 
-               <div class="col s12 m12 " >
+      <div class="col s12 m12 " >
                   
-
                   <div class="row" id="main1">
                   <ul class="collapsible">
                      <li>
@@ -56,6 +59,8 @@
                               <li class="collection-item">Email: <span id="email"></span></li>
                               <li class="collection-item">Name: <span id="fullName"></span></li>
                               <li class="collection-item">Last Access: <span id="lastAccess"></span></li>
+                              <!--TODO: Remember to update the button below later-->
+                              <button id="changeAccInfo" class="waves-effect waves-light btn">Change Account Info</button> 
                            </ul>
                         </div>
                      </li>
@@ -84,7 +89,7 @@
                      <div id="day7" class="col s12 #ffffff white"><span>Date: Oct 13</span></div>
                   </div>
                   
-                  </div>
+
 
 
                   <!--Attempt at using a tab/(cards w/ tabs) nested in a collapsible-->
@@ -144,6 +149,7 @@
                      <!--</li>
 
                   </ul>-->
+                  
                   <div class="row" id="main3">
                   <ul class="collapsible">
                         <li>
@@ -153,31 +159,27 @@
                                  <li class="collection-header">
                                     <!--<h5>Today's Summary</h5>-->
                                  </li>
-                                 <li class="collection-item">Email: <span id="email"></span></li>
-                                 <li class="collection-item">Name: <span id="fullName"></span></li>
-                                 <li class="collection-item">Last Access: <span id="lastAccess"></span></li>
+                                 <li class="collection-item"><!--Email: <span id="email"></span>--></li>
+                                 <li class="collection-item"><!--Name: <span id="fullName"></span>--></li>
+                                 <li class="collection-item"><!--Last Access: <span id="lastAccess"></span>--></li>
                               </ul>
                            </div>
                         </li>
-                  </ul>
-                  </div>
 
-                  <div class="row" id="main4">
-                     <ul class="collapsible">
-                           <li>
-                              <div class="collapsible-header">Activity Details</div>
-                              <div class="collapsible-body">
-                                 <ul class="collection with-header">
-                                    <li class="collection-header">
-                                       <!--<h5>Today's Summary</h5>-->
-                                    </li>
-                                    <li class="collection-item">Email: <span id="email"></span></li>
-                                    <li class="collection-item">Name: <span id="fullName"></span></li>
-                                    <li class="collection-item">Last Access: <span id="lastAccess"></span></li>
-                                 </ul>
-                              </div>
-                           </li>
-                        </ul>
+                        <li>
+                           <div class="collapsible-header">Activity Details</div>
+                           <div class="collapsible-body">
+                              <ul class="collection with-header">
+                                 <li class="collection-header">
+                                    <!--<h5>Today's Summary</h5>-->
+                                 </li>
+                                 <li class="collection-item"><!--Email: <span id="email"></span>--></li>
+                                 <li class="collection-item"><!--Name: <span id="fullName"></span>--></li>
+                                 <li class="collection-item"><!--Last Access: <span id="lastAccess"></span>--></li>
+                              </ul>
+                           </div>
+                        </li>
+                     </ul>
                   </div>
 
                   <div class="row" id="main5">
@@ -189,15 +191,15 @@
                         <label for="deviceId">New Device ID:</label>
                         <input type="text" id="deviceId" name="deviceId" col="30">
                         <button id="registerDevice" class="waves-effect waves-light btn">Register</button> 
-                        <button id="cancel" class="waves-effect waves-light btn">Cancel</button> 
+                        <!--<button id="cancel" class="waves-effect waves-light btn">Cancel</button>--> 
                      </li>
                      <li class="collection-item" id="addDeviceControl"><a href="#!" id="addDevice">Add Device</a></li>
                   </ul>
                   </div>
 
 
-                  <div class='red-text text-darken-2' id="error"></div>
-               </div>
+                  <div class='red-text text-darken-2' id="errorDispl"></div>
+      </div>
              
       </div>
       <!--Old code-->
