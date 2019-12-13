@@ -275,6 +275,7 @@ router.post('/sunRun', function(req, res) {
 
 	};
 	// Ensure the POST data includes required properties
+  console.log(req.body);
 	if(!req)
 	{
 		console.log("Missing JSON entirely");
@@ -292,42 +293,50 @@ router.post('/sunRun', function(req, res) {
 	else if( !req.body.hasOwnProperty("deviceId") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing deviceId parameter.";
+    console.log("no deviceid");
 		res.status(201).send(JSON.stringify(responseJson));
 	}
 	else if( !req.body.hasOwnProperty("apikey") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing apikey parameter.";
+    console.log("No api key");
 		res.status(201).send(JSON.stringify(responseJson));
 	}
 	else if( !req.body.hasOwnProperty("longitude") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing longitude parameter.";
+    console.log("No long");
 		res.status(201).send(JSON.stringify(responseJson));
 	}
 	else if( !req.body.hasOwnProperty("latitude") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing latitude parameter.";
+    console.log("No lat");
 		res.status(201).send(JSON.stringify(responseJson));
 	}
   else if( !req.body.hasOwnProperty("speed") ) {
     responseJson.status = "ERROR";
     responseJson.message = "Request missing speed parameter.";
+    console.log("no speed");
     res.status(201).send(JSON.stringify(responseJson));
   }
 	else if( !req.body.hasOwnProperty("uv") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing latitude parameter.";
+    console.log("No uv");
 		res.status(201).send(JSON.stringify(responseJson));
 	}
 
 	else if( !req.body.hasOwnProperty("time") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing time parameter.";
+    console.log("no time");
 		res.status(201).send(JSON.stringify(responseJson));
 	}
   else if(!req.body.hasOwnProperty("status")){
     responseJson.status = "ERROR";
     responseJson.message = "Request missing status parameter.";
+    console.log("no status");
     res.status(201).send(JSON.stringify(responseJson));
   }
 	else {
@@ -370,6 +379,7 @@ router.post('/sunRun', function(req, res) {
           uvData.save(function(err) {
           if (err) {
             responseJson.status = "ERROR";
+            console.log("START: Error saving");
             responseJson.message = "Error saving data in db." + err;
             res.status(201).send(JSON.stringify(responseJson));
           }
@@ -382,6 +392,7 @@ router.post('/sunRun', function(req, res) {
               deviceData.findOne({"deviceId": req.body.deviceId}).limit(1).exec(function(err1, data)
               {
                 if (err1) {
+                  console.log("START: Database find one erorr");
                   res.status(201).json({ error: "Database findOne error" });
                 }
                 else
@@ -391,6 +402,7 @@ router.post('/sunRun', function(req, res) {
                   if(data.uvIndex[0] > deviceUsed.threshold)
                   {
                     responseJson.status = "Alert";
+                    console.log("START: Alert for threshold");
                     responseJson.threshold = deviceUsed.threshold;
                     res.status(201).send(JSON.stringify(responseJson));
                   }
@@ -398,6 +410,7 @@ router.post('/sunRun', function(req, res) {
                     //console.log("Data does not warrent an alert");
                   //  console.log("yoohoo");
                     responseJson.status = "NoAlert";
+                    console.log("START: No alert for threshold");
                     responseJson.threshold = deviceUsed.threshold;
                     res.status(200).send(JSON.stringify(data));
                   //}
@@ -407,6 +420,7 @@ router.post('/sunRun', function(req, res) {
             catch(er)
             {
               responseJson.status = "Not enough data, recorded though";
+              console.log("START: Not enough data, recorded though");
               responseJson.threshold = deviceUsed.threshold;
               res.status(201).send(JSON.stringify(responseJson));
 
@@ -419,11 +433,13 @@ router.post('/sunRun', function(req, res) {
         deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data){
           if (err){
             responseJson.status = "ERROR";
+            console.log("STOP: Error finding devicedata");
             responseJson.message = "Error finding activity in db. " + err;
             res.status(201).send(JSON.stringify(responseJson));
           }
           else if(!data){
             responseJson.status = "ERROR";
+            console.log("STOP: No data");
             responseJson.message = "No data." + err;
             res.status(401).send(JSON.stringify(responseJson));
           }
@@ -469,6 +485,7 @@ router.post('/sunRun', function(req, res) {
               if(err){
                 responseJson.status = "ERROR";
                 responseJson.message = "Error updating data in DB" + err;
+                console.log("STOP: error updating datbase");
                 res.status(201).send(JSON.stringify(responseJson));
               }
               else{
@@ -477,6 +494,7 @@ router.post('/sunRun', function(req, res) {
                   deviceData.findOne({"deviceId": req.body.deviceId}).limit(1).exec(function(err1, data)
                   {
                     if (err1) {
+                      console.log("STOP: database findone error")
                       res.status(201).json({ error: "Database findOne error" });
                     }
                     else
@@ -487,12 +505,14 @@ router.post('/sunRun', function(req, res) {
                         responseJson.status = "Alert";
                         responseJson.threshold = deviceUsed.threshold;
                         responseJson.data = data;
+                        console.log("STOP: threshold exceeded");
                         res.status(201).send(JSON.stringify(responseJson))
                       }
                       else{
                         //console.log("Data does not warrent an alert");
                       //  console.log("yoohoo");
                         responseJson.status = "NoAlert";
+                        console.log("STOP: No alert for threshold");
                         res.status(200).send(JSON.stringify(deviceUsed.threshold))
                       //}
                     }
@@ -501,6 +521,7 @@ router.post('/sunRun', function(req, res) {
                 catch(er)
                 {
                   responseJson.status = "Not enough data, recorded though";
+                  console.log("STOP: not enough data, recorded though");
                   responseJson.threshold = deviceUsed.threshold;
                   res.status(201).send(JSON.stringify(responseJson));
 
@@ -515,12 +536,14 @@ router.post('/sunRun', function(req, res) {
           deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data){
             if(err){
               responseJson.status = "ERROR";
+              console.log("Activity: erorr finding devicedata");
               responseJson.message = "Error finding activity in db. " + err;
               res.status(201).send(JSON.stringify(responseJson));
             }
             else{
               if(!data){
                 responseJson.status = "ERROR";
+                console.log("Activity: no data");
                 responseJson.message = "No data." + err;
                 res.status(201).send(JSON.stringify(responseJson));
               }
@@ -530,6 +553,7 @@ router.post('/sunRun', function(req, res) {
                 data.save(function(err){
                   if(err){
                     responseJson.status = "ERROR";
+                    console.log("Activity: erorr updating");
                     responseJson.message = "Error updating data in DB" + err;
                     res.status(201).send(JSON.stringify(responseJson));
                   }
@@ -539,6 +563,7 @@ router.post('/sunRun', function(req, res) {
                       deviceData.findOne({"deviceId": req.body.deviceId}).limit(1).exec(function(err1, data)
                       {
                         if (err1) {
+                          console.log("Database findOne error");
                           res.status(201).json({ error: "Database findOne error" });
                         }
                         else
@@ -547,6 +572,7 @@ router.post('/sunRun', function(req, res) {
                           if(data.uvIndex[data.uvIndex.length] > deviceUsed.threshold)
                           {
                             responseJson.status = "Alert";
+                            console.log("Activity: Alert for threshold");
                             responseJson.threshold = deviceUsed.threshold;
                             res.status(201).send(JSON.stringify(responseJson))
                           }
@@ -554,6 +580,7 @@ router.post('/sunRun', function(req, res) {
                             //console.log("Data does not warrent an alert");
                           //  console.log("yoohoo");
                             responseJson.status = "NoAlert";
+                            console.log("Activity: No alert for threshold");
                             responseJson.threshold = deviceUsed.threshold;
                             responseJson.data = data;
                             res.status(200).send(JSON.stringify(responseJson))
@@ -564,6 +591,7 @@ router.post('/sunRun', function(req, res) {
                     catch(er)
                     {
                       responseJson.status = "Not enough data, recorded though";
+                      console.log("Activity: No Alert for threshold");
                       responseJson.threshold = deviceUsed.threshold;
                       responseJson.data = data;
                       res.status(201).send(JSON.stringify(responseJson));
@@ -578,6 +606,7 @@ router.post('/sunRun', function(req, res) {
 
       else{
 				responseJson.status = "ERROR";
+        console.log("ERROR: Other");
 				responseJson.message = "Device ID " + req.body.deviceId + " not registered.";
 				res.status(201).send(JSON.stringify(responseJson));
       }
