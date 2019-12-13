@@ -23,7 +23,7 @@ function getNewApikey() {
 }
 
 //Updates the threshold
-router.post("/setThreshold", function(req, res)){
+router.post("/setThreshold", function(req, res){
   if (!req.body.hasOwnProperty("deviceId")) {
      return res.status(401).json({success: false, message: "Missing deviceId in request"});
   }
@@ -45,7 +45,7 @@ router.post("/setThreshold", function(req, res)){
     }
   }
 
-}
+});
 
 router.get('/weather', function(req, res, next){
   let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
@@ -194,12 +194,12 @@ router.post('/register', function(req, res, next) {
         deviceId: req.body.deviceId,
         userEmail: email,
         apikey: deviceApikey,
-        threshold: userThreshold;
+        threshold: userThreshold
       });
 
       // //See if a user has the email
       // //Then push the deviceId to the User's device list
-      User.findOne({email: req.body.email}, function(err, user)){
+      User.findOne({email: req.body.email}, function(err, user){
         if(user !== null){
           conosle.log("Saved user device");
           user.userDevices.push(req.body.deviceId);
@@ -357,8 +357,8 @@ router.post('/sunRun', function(req, res) {
           speed: [],
           uvIndex: [],
           duration: 0,
-          startTime: req.body.time
-          endTime: Date.now,
+          startTime: req.body.time,
+          endTime: req.body.time,
           activity: "nothing yet",
           humidity: 0,
           temperature: 0
@@ -392,17 +392,17 @@ router.post('/sunRun', function(req, res) {
                   {
                     responseJson.status = "Alert";
                     responseJson.threshold = deviceUsed.threshold;
-                    res.status(201).send(JSON.stringify(responseJson))
+                    res.status(201).send(JSON.stringify(responseJson));
                   }
                   else{
                     //console.log("Data does not warrent an alert");
                   //  console.log("yoohoo");
                     responseJson.status = "NoAlert";
                     responseJson.threshold = deviceUsed.threshold;
-                    res.status(200).send(JSON.stringify(data))
+                    res.status(200).send(JSON.stringify(data));
                   //}
                 }
-              });
+              }});
             }
             catch(er)
             {
@@ -414,11 +414,9 @@ router.post('/sunRun', function(req, res) {
           }
         });
         }
-
-      }
       //if we're stopping the activity
       else if (req.body.status == "stop") {
-        deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data)){
+        deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data){
           if (err){
             responseJson.status = "ERROR";
             responseJson.message = "Error finding activity in db. " + err;
@@ -498,7 +496,7 @@ router.post('/sunRun', function(req, res) {
                         res.status(200).send(JSON.stringify(deviceUsed.threshold))
                       //}
                     }
-                  });
+                  }});
                 }
                 catch(er)
                 {
@@ -508,14 +506,13 @@ router.post('/sunRun', function(req, res) {
 
                 }
               }
-              }
             }); //end of saving data
           } //end of else
           });
       } //end of stop status
       //If we are updating the speed and uvindex values
       else if (req.body.status == "activity"){
-          deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data)){
+          deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data){
             if(err){
               responseJson.status = "ERROR";
               responseJson.message = "Error finding activity in db. " + err;
@@ -562,7 +559,7 @@ router.post('/sunRun', function(req, res) {
                             res.status(200).send(JSON.stringify(responseJson))
                           //}
                         }
-                      });
+                      }});
                     }
                     catch(er)
                     {
@@ -573,10 +570,9 @@ router.post('/sunRun', function(req, res) {
 
                     }
                   }
-                  }
                 }); //end of saving data
               } //end of else for saving
-            } //end of no-error else
+            }//end of no-error else
           }); // end of find and execute
       } //end of activity status
 
@@ -587,7 +583,7 @@ router.post('/sunRun', function(req, res) {
       }
 
 
-});
+}});
 
 //Delete a device and its deviceData
 router.delete('/deleteDevice', function(req, res){
@@ -640,9 +636,5 @@ router.delete('/deleteDevice', function(req, res){
 		return res.status(400).json({ error: "Error decoding token in deleteDevice" });
 	}
 });
-
-router.get("/weather", function(req, res)){
-  let recent = deviceData.findOne()
-}
 
 module.exports = router;

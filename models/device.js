@@ -6,7 +6,7 @@ var deviceSchema = new db.Schema({
     userEmail:    String,
     //Including lastContact just in case
     lastContact:  { type: Date, default: Date.now },
-    threshold: Number,
+    threshold: {type: Number, default: 10000},
     data: [String]
 });
 

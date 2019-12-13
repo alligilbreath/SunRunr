@@ -6,7 +6,7 @@ var userSchema = new db.Schema({
   passwordHash: String,
   lastAccess:   { type: Date, default: Date.now },
   userDevices:  [ String ],
-  threhold: Number
+  threshold: {type: Number, default: 10000}
 
 });
 
