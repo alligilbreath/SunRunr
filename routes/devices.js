@@ -87,7 +87,7 @@ router.get('/summary', function(req, res, next){
   }
   responseJson.duration = totalDuration;
   responseJson.uv = totalUV;
-  res.status().json(responseJson);
+  res.status(200).json(responseJson);
 });
 
 router.get('/weather', function(req, res, next){
@@ -352,7 +352,7 @@ router.post('/sunRun', function(req, res) {
 
 	};
 	// Ensure the POST data includes required properties
-  console.log(req.body);
+  //console.log(req.body);
 	if(!req)
 	{
 		console.log("Missing JSON entirely");
@@ -682,6 +682,7 @@ router.post('/sunRun', function(req, res) {
                 return;
               }
               else{
+                data.endTime = Date.now();
                 data.speed.push(req.body.speed);
                 data.uvIndex.push(req.body.uv);
                 data.save(function(err){
