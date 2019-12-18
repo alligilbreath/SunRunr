@@ -5,8 +5,8 @@ let deviceData = require("../models/deviceData");
 let fs = require('fs');
 let jwt = require("jwt-simple");
 let request = require("request");
-let api_humid = 0;
-let api_temp = 0;
+let api_humid = 30;
+let api_temp = 276.8;
 
 /* Authenticate user */
 var secret = fs.readFileSync(__dirname + '/jwtkey').toString();
@@ -22,42 +22,6 @@ function getNewApikey() {
   }
 
   return newApikey;
-}
-
-function getTempAndHumidity(lat, long){
-  let lastLat = lat;
-  let lastLong = long;
-  request({
-    method: "GET",
-    uri: "http://api.openweathermap.org/data/2.5/weather",
-    qs: {
-      lat: lastLat,
-      lon: lastLong,
-      APPID: "3471745d22814f7d2209675f54c3ec14"
-    }
-  }, function(err, response, body){
-    if(err){
-      console.log("API error. Error is " + err);
-      return;
-    }
-    else if((JSON.parse(body)).hasOwnProperty("error")){
-      console.log("API Error");
-      return;
-    }
-    else{
-      //console.log(response);
-      //console.log(body);
-      var apiRes = JSON.parse(body);
-      api_humid = apiRes.main.humidity;
-      api_temp = apiRes.main.temp;
-      //console.log("Api res is ");
-      //console.log(apiRes);
-      //return apiRes;
-      return;
-
-    }
-  });
-  return;
 }
 
 //Updates the threshold
@@ -533,37 +497,37 @@ router.post('/sunRun', function(req, res) {
             //console.log("Last long is " + lastLong);
             //console.log("Last lat is " + lastLat);
             //Get humidity and temperature for the activity
-            getTempAndHumidity(lastLat, lastLong);
-            // request({
-            //   method: "GET",
-            //   uri: "http://api.openweathermap.org/data/2.5/weather",
-            //   qs: {
-            //     lat: lastLat,
-            //     lon: lastLong,
-            //     APPID: "3471745d22814f7d2209675f54c3ec14"
-            //   }
-            // }, function(err, response, body){
-            //   if(err){
-            //     console.log("API error. Error is " + err);
-            //   }
-            //   else if((JSON.parse(body)).hasOwnProperty("error")){
-            //     console.log("API Error");
-            //   }
-            //   else{
-            //     //console.log(response);
-            //     //console.log(body);
-            //     var apiRes = JSON.parse(body);
-            //     //console.log(apiRes);
-            //     console.log("Api humid " + apiRes.main.humidity);
-            //     console.log("APi temp " + apiRes.main.temp);
-            //     api_humid = apiRes.main.humidity;
-            //     api_temp = apiRes.main.temp;
-            //
-            //     //data.humidity = apiRes.main.humidity;
-            //     //data.temperature = apiRes.main.temp;
-            //
-            //   }
-            // });
+            //getTempAndHumidity(lastLat, lastLong);
+            request({
+              method: "GET",
+              uri: "http://api.openweathermap.org/data/2.5/weather",
+              qs: {
+                lat: lastLat,
+                lon: lastLong,
+                APPID: "3471745d22814f7d2209675f54c3ec14"
+              }
+            }, function(err, response, body){
+              if(err){
+                console.log("API error. Error is " + err);
+              }
+              else if((JSON.parse(body)).hasOwnProperty("error")){
+                console.log("API Error");
+              }
+              else{
+                //console.log(response);
+                //console.log(body);
+                var apiRes = JSON.parse(body);
+                //console.log(apiRes);
+                console.log("Api humid " + apiRes.main.humidity);
+                console.log("APi temp " + apiRes.main.temp);
+                api_humid = apiRes.main.humidity;
+                api_temp = apiRes.main.temp;
+
+                //data.humidity = apiRes.main.humidity;
+                //data.temperature = apiRes.main.temp;
+
+              }
+            });
             //var apiRes = getTempAndHumidity(lastLat, lastLong);
             //console.log("Outside apiRes is ");
             //console.log(apiRes);
