@@ -21,7 +21,6 @@ function showData(data, textStatus, jqXHR){
 		$.ajax({
 			url: "/devices/sensorData", //TODO: Clarify actual url endpoint
 			method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
-			method: 'GET', // TODO: Whys is it a POST. Shouldn't it be a GET?
 			contentType: 'application/json',
 			headers: { 'x-auth': window.localStorage.getItem("authToken") },
 			dataType: 'json'
@@ -188,12 +187,7 @@ $(function () {
 	/* if(!window.localStorage.getItem('authToken')){
 	 	window.location = "login.html";
 	 }*/
-<<<<<<< HEAD
 
-	 //else{
-=======
-
->>>>>>> 5e72a8999c3318c1d9adb1d77e11db52d9d6b3f2
 	 $.ajax({
 		url: "/users/account",
 		method: 'GET',
