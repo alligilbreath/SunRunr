@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>SunRunr - User Account Page</title>
+
+	  <!-- Import jQuery -->
+	  <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	  <!-- Import Google Icon Font -->
+	  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	  <!-- Compiled and minified CSS -->
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	  <!-- Compiled and minified JavaScript -->
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>	  
+
+     <!-- Imports CanvasJS, for the Line Charts -->
+     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+
+      <link href="stylesheets/style.css" rel="stylesheet">
+      <script src="weatherReport.js" defer></script>
+      
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+   </head>
+
+   <body>
+    <div class="#607d8b blue-grey background">
+
+        <ul id='dropdown1' class='dropdown-content'>
+            <li><a href="#" id="logOut">Log Out</a></li>
+            <li><a href="#" id="Home">Home</a></li>
+        </ul>
+                
+        <nav>
+            <div class="nav-wrapper #f57c00 orange darken-2">
+            <span id="siteTitle">SunRunr</span>
+            
+            <ul class="right ">
+                <!-- Dropdown Trigger -->
+                <li><a class='dropdown-trigger btn' href='#' data-target='dropdown1'><i class="material-icons">more_vert</i></a></li>
+            </ul>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="userPage.html">Home</a></li>
+              </ul>
+            </div>
+        </nav>
+
+        <div class="col s12 m12 " >
+
+            
+
+            <div class="row">
+                <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s2"><a href="#today">Today</a></li>
+                    <li class="tab col s2"><a href="#day2">Day 2</a></li>
+                    <li class="tab col s2"><a href="#day3">Day 3</a></li>
+                    <li class="tab col s2"><a href="#day4">Day 4</a></li>
+                    <li class="tab col s2"><a href="#day5">Day 5</a></li>
+                    
+                </ul>
+                </div>
+                <div id="today"class="col s8"><div class="card showWeather">Test 1</div class="card"></div>
+                <div id="day2" class="col s8"><div class="card showWeather">Test 2</div class="card"></div>
+                <div id="day3" class="col s8"><div class="card showWeather">Test 3</div class="card"></div>
+                <div id="day4" class="col s8"><div class="card showWeather">Test 4</div class="card"></div>
+                <div id="day5" class="col s8"><div class="card showWeather">Test 5</div class="card"></div>
+
+            </div>
+
+
+
+        </div>
+        
+
+
+    </div>
+   </body>
+</html>

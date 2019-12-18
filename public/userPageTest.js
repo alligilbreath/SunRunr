@@ -7,6 +7,9 @@ $(function(){
     
     // Sample from canvasJS website
     /////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    var data = [{y: 500}, {y: 450}, {y: 400}, {y: 350}, {y: 300}];
+    
     var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "light2",
@@ -39,7 +42,30 @@ $(function(){
         }]
     });
     chart.render();
+
+    var chart2 = new CanvasJS.Chart("chartContainer2", {
+        animationEnabled: true,
+        theme: "light2",
+        title:{
+            text: "UV Exposure During Activity"
+        },
+        axisY:{
+            title: "UV", 
+            includeZero: false
+        },
+        axisX:{
+            title: "Time (min)"
+        },
+        data: [{        
+            type: "line",       
+            dataPoints: data
+        }]
+    });
+    chart2.render();
     /////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
+
     
     
     
