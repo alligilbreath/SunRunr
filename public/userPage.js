@@ -9,27 +9,13 @@ function showData(data, textStatus, jqXHR){
 		let deviceId = {deviceId: data[data.length - 1].userDevices[0]};
 
 		// Make buttons for different devices here
-<<<<<<< HEAD
-		var email = data[data.length - 1].email;
-		var fullName = data[data.length - 1].fullName;
-		var lastAccess = data[data.length - 1].lastAccess;
-		
-		$('#email').html(email);
-		$('#fullName').html(fullName);
-		$('#lastAccess').html(lastAccess);
-=======
 
 
->>>>>>> 5e72a8999c3318c1d9adb1d77e11db52d9d6b3f2
 
 
 		$.ajax({
 			url: "/devices/sensorData", //TODO: Clarify actual url endpoint
-<<<<<<< HEAD
-			method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
-=======
 			method: 'GET', // TODO: Whys is it a POST. Shouldn't it be a GET?
->>>>>>> 5e72a8999c3318c1d9adb1d77e11db52d9d6b3f2
 			contentType: 'application/json',
 			headers: { 'x-auth': window.localStorage.getItem("authToken") },
 			dataType: 'json'
@@ -181,13 +167,8 @@ function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, acti
 
 
 /* TODO: Perhaps try to instead of having the user always enter their device ID to get their data,
-<<<<<<< HEAD
-maybe try to automatically get their first device id and then grab all of the data to be displayed 
-on the $(function(){}) below (on page load). This would mean changing the /devices/sensorData endpoint to a GET
-=======
 maybe try to automatically get their first device id and then grab all of the data to be displayed
 on the $(function(){}) below (before page load). This would mean changing the /devices/sensorData endpoint to a GET
->>>>>>> 5e72a8999c3318c1d9adb1d77e11db52d9d6b3f2
 OR creating the same /devices/sensorData endpoint but as a GET */
 $(function () {
 
@@ -196,12 +177,6 @@ $(function () {
 	/* if(!window.localStorage.getItem('authToken')){
 	 	window.location = "login.html";
 	 }*/
-<<<<<<< HEAD
-	 
-	 //else{
-=======
-
->>>>>>> 5e72a8999c3318c1d9adb1d77e11db52d9d6b3f2
 	 $.ajax({
 		url: "/users/account",
 		method: 'GET',

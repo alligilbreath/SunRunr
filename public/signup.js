@@ -33,16 +33,12 @@ function sendRegisterRequest() {
     $("#ServerResponse").show();
 	  return;
   }
-<<<<<<< HEAD
-  
-=======
 
 
 
   // TODO: Hash and salt the password?
   // Answer: Already done that in one of the endpoints
 
->>>>>>> 5e72a8999c3318c1d9adb1d77e11db52d9d6b3f2
   let newAccountInfo = {email: email, fullName: userFullName, password: password};
 
   $.ajax({

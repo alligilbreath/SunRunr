@@ -18,13 +18,9 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 }
 
 	// This function is called when user email and password exist in database, sending user to their Account page
-<<<<<<< HEAD
-	function redirectToAccount(data, textSatus, jqXHR){ 		
-=======
 	function redirectToAccount(data, textSatus, jqXHR){
 		// TODO: Set up user authentication token(?) ANSWER: probably not... already made in routes.users.js
 
->>>>>>> 5e72a8999c3318c1d9adb1d77e11db52d9d6b3f2
 		window.localStorage.setItem('authToken', data.authToken);
 		window.location = "userPage.html";
 	}
