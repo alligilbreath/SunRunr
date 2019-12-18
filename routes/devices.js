@@ -49,7 +49,11 @@ router.post("/setThreshold", function(req, res){
 
 });
 
-router.get('/summary'), function(req, res, next){
+router.get('/activityDetail', function(req, res, next){
+
+});
+
+router.get('/summary', function(req, res, next){
   let responseJson = {dataPoints : [], duration : 0, uv : 0};
   let dataPoints = deviceData.find({"deviceId" : req.body.deviceId});
   let currDate = Date.now();
@@ -80,7 +84,7 @@ router.get('/summary'), function(req, res, next){
   responseJson.duration = totalDuration;
   responseJson.uv = totalUV;
   res.status(200).json(responseJson);
-}
+});
 
 router.get('/weather', function(req, res, next){
   let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
@@ -167,9 +171,14 @@ router.get('/myDevices', function(req, res, next){
 	}
 });
 
+//Change activity type
+router.post('/changeActivity', function (req, res, next)){
+
+}
+
 //Get all sensor data for deviceId query
 router.get('/sensorData', function(req, res, next){
-  console.log("in sensor data");
+  //console.log("in sensor data");
 	deviceData.find({"deviceId": req.body.deviceId}).exec(function(err,data){
 		if(err){
       console.log("/sensor data error");
