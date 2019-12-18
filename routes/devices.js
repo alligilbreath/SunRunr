@@ -27,34 +27,68 @@ function getNewApikey() {
 //Updates the threshold
 router.post("/setThreshold", function(req, res){
   if (!req.body.hasOwnProperty("deviceId")) {
-     return res.status(401).json({success: false, message: "Missing deviceId in request"});
+     return res.status(400).json({success: false, message: "Missing deviceId in request"});
   }
   else{
     try {
       Device.findOne({"deviceId": req.body.deviceId}, function (err, device){
         if(!err){
           device.threshold = req.body.threshold;
-          return res.status(200).json(userStatus);
+          return res.status(201).json({success: true, message: "Threshold updated."});
         }
         else{
-          return res.status(400).json({success: false, message: "Couldn't find device."})
+          return res.status(400).json({success: false, message: "Device does not exist."})
         }
       });
 
     }
     catch{
-      return res.status(401).json({success: false, message: "Couldn't change threshold."});
+      return res.status(400).json({success: false, message: "Couldn't change threshold."});
     }
   }
 
 });
 
-router.get('/summary'), function(req, res, next){
-  let dataPoints = deviceData.find({"deviceId" : req.body.deviceId});
-  for (var i = 0; i < dataPoints.length; i++){
 
+//Get all of the details for an activity
+router.get('/activityDetail', function(req, res, next){
+  let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
+  res.status(200).json(lastData);
+
+});
+
+router.get('/summary', function(req, res, next){
+  let responseJson = {dataPoints : [], duration : 0, uv : 0};
+  let dataPoints = deviceData.find({"deviceId" : req.body.deviceId});
+  let currDate = Date.now();
+  let pastDate = Date.now();
+  pastDate.setDate(currDate.getDate() - 1);
+  let pastData = [];
+  for (var i = 0; i < dataPoints.length; i++){
+    var currData = dataPoints[i];
+    if(currData.endTime.getTime() > pastDate.getTime()){
+      pastData.push(currData);
+    }
   }
-}
+  responseJson.dataPoints = pastData;
+  if(pastData.length == 0){
+    res.status(400).json("No data for past 7 days");
+    return;
+  }
+  let totalDuration = 0;
+  let totalUV = 0;
+  for(var i = 0; i < pastData.length; i++){
+    totalDuration += pastData[i].duration;
+    if((pastData[i].uvIndex).length != 0){
+      for(var j = 0; j < (pastData[i].uvIndex).length; j++){
+        totalUV += (pastData[i].uvIndex)[j];
+      }
+    }
+  }
+  responseJson.duration = totalDuration;
+  responseJson.uv = totalUV;
+  res.status(200).json(responseJson);
+});
 
 router.get('/weather', function(req, res, next){
   let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
@@ -81,6 +115,7 @@ router.get('/weather', function(req, res, next){
     else{
       var apiRes = JSON.parse(body);
       var list = apiRes.list;
+      responseJson.forecast = list;
       res.status(200).json(responseJson);
     }
   });
@@ -140,9 +175,32 @@ router.get('/myDevices', function(req, res, next){
 	}
 });
 
+//Change activity type
+router.post('/changeActivity', function (req, res, next){
+  let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
+  let responseJson = {message : ""};
+  if(!req.body.hasOwnProperty("type")){
+    responseJson.message = "Missing activity type";
+    res.status(400).json(responseJson);
+  }
+  else{
+    lastData.activityType = req.body.type;
+    lastData.save(function (err){
+      if(err){
+        responseJson.message = "Received error " + err;
+        res.status(400).json(responseJson);
+      }
+      else{
+        responseJson.message = "Activity type changed";
+        res.status(201).json(responseJson);
+      }
+    });
+  }
+});
+
 //Get all sensor data for deviceId query
 router.get('/sensorData', function(req, res, next){
-  console.log("in sensor data");
+  //console.log("in sensor data");
 	deviceData.find({"deviceId": req.body.deviceId}).exec(function(err,data){
 		if(err){
       console.log("/sensor data error");
@@ -152,11 +210,12 @@ router.get('/sensorData', function(req, res, next){
 		else{
     //  console.log("/sensor data sent back");
       //console.log(data);
-			res.status(201).send(JSON.stringify(data));
+			res.status(200).send(JSON.stringify(data));
 		}
 	});
 });
 
+//Register a device
 router.post('/register', function(req, res, next) {
   let responseJson = {
     registered: false,
@@ -293,69 +352,69 @@ router.post('/sunRun', function(req, res) {
 
 	};
 	// Ensure the POST data includes required properties
-  console.log(req.body);
+  //console.log(req.body);
 	if(!req)
 	{
 		console.log("Missing JSON entirely");
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing all parameters.";
-		res.status(201).send(JSON.stringify(responseJson));
+		res.status(400).send(JSON.stringify(responseJson));
 	}
 	else if(!req.body)
 	{
 		console.log("Missing JSON body");
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing body.";
-		res.status(201).send(JSON.stringify(responseJson));
+		res.status(400).send(JSON.stringify(responseJson));
 	}
 	else if( !req.body.hasOwnProperty("deviceId") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing deviceId parameter.";
     console.log("no deviceid");
-		res.status(201).send(JSON.stringify(responseJson));
+		res.status(400).send(JSON.stringify(responseJson));
 	}
 	else if( !req.body.hasOwnProperty("apikey") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing apikey parameter.";
     console.log("No api key");
-		res.status(201).send(JSON.stringify(responseJson));
+		res.status(400).send(JSON.stringify(responseJson));
 	}
 	else if( !req.body.hasOwnProperty("longitude") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing longitude parameter.";
     console.log("No long");
-		res.status(201).send(JSON.stringify(responseJson));
+		res.status(400).send(JSON.stringify(responseJson));
 	}
 	else if( !req.body.hasOwnProperty("latitude") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing latitude parameter.";
     console.log("No lat");
-		res.status(201).send(JSON.stringify(responseJson));
+		res.status(400).send(JSON.stringify(responseJson));
 	}
   else if( !req.body.hasOwnProperty("speed") ) {
     responseJson.status = "ERROR";
     responseJson.message = "Request missing speed parameter.";
     console.log("no speed");
-    res.status(201).send(JSON.stringify(responseJson));
+    res.status(400).send(JSON.stringify(responseJson));
   }
 	else if( !req.body.hasOwnProperty("uv") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing latitude parameter.";
     console.log("No uv");
-		res.status(201).send(JSON.stringify(responseJson));
+		res.status(400).send(JSON.stringify(responseJson));
 	}
 
 	else if( !req.body.hasOwnProperty("time") ) {
 		responseJson.status = "ERROR";
 		responseJson.message = "Request missing time parameter.";
     console.log("no time");
-		res.status(201).send(JSON.stringify(responseJson));
+		res.status(400).send(JSON.stringify(responseJson));
 	}
   else if(!req.body.hasOwnProperty("status")){
     responseJson.status = "ERROR";
     responseJson.message = "Request missing status parameter.";
     console.log("no status");
-    res.status(201).send(JSON.stringify(responseJson));
+    res.status(400).send(JSON.stringify(responseJson));
   }
 	else {
 		// Find the device by deviceId and API
@@ -367,7 +426,11 @@ router.post('/sunRun', function(req, res) {
 					if (err1) {
             console.log("Database find one error");
 						res.status(401).json({ error: "Database findOne error" });
+            return;
 					}
+          else{
+            data.lastContact = Date.now();
+          }
 				});
 			}
 			catch(er)
@@ -401,7 +464,7 @@ router.post('/sunRun', function(req, res) {
             responseJson.status = "ERROR";
             console.log("START: Error saving " + err);
             responseJson.message = "Error saving data in db. " + err;
-            res.status(201).send(JSON.stringify(responseJson));
+            res.status(401).send(JSON.stringify(responseJson));
             return;
           }
           else {
@@ -414,7 +477,7 @@ router.post('/sunRun', function(req, res) {
               {
                 if (err1) {
                   console.log("START: Database find one erorr");
-                  res.status(201).json({ error: "Database findOne error" });
+                  res.status(400).json({ error: "Database findOne error" });
                   return;
                 }
                 else
@@ -437,7 +500,7 @@ router.post('/sunRun', function(req, res) {
                     console.log("START: No alert for threshold");
                     responseJson.message = "Threshold is " + deviceUsed.threshold;
                     responseJson.data = deviceUsed.threshold;
-                    res.status(200).send(JSON.stringify(responseJson));
+                    res.status(201).send(JSON.stringify(responseJson));
                     return;
                   //}
                 }
@@ -462,7 +525,7 @@ router.post('/sunRun', function(req, res) {
             responseJson.status = "ERROR";
             console.log("STOP: Error finding devicedata");
             responseJson.message = "Error finding activity in db. " + err;
-            res.status(201).send(JSON.stringify(responseJson));
+            res.status(401).send(JSON.stringify(responseJson));
           }
           else if(!data){
             responseJson.status = "ERROR";
@@ -548,7 +611,7 @@ router.post('/sunRun', function(req, res) {
                 responseJson.status = "ERROR";
                 responseJson.message = "Error updating data in DB" + err;
                 console.log("STOP: error updating datbase");
-                res.status(201).send(JSON.stringify(responseJson));
+                res.status(401).send(JSON.stringify(responseJson));
                 return;
               }
               else{
@@ -558,7 +621,7 @@ router.post('/sunRun', function(req, res) {
                   {
                     if (err1) {
                       console.log("STOP: database findone error")
-                      res.status(201).json({ error: "Database findOne error" });
+                      res.status(401).json({ error: "Database findOne error" });
                       return;
                     }
                     else
@@ -580,7 +643,7 @@ router.post('/sunRun', function(req, res) {
                         responseJson.message = "Threshold is " + deviceUsed.threshold;
                         console.log("STOP: No alert for threshold");
                         responseJson.data = deviceUsed.threshold;
-                        res.status(200).send(JSON.stringify(responseJson));
+                        res.status(201).send(JSON.stringify(responseJson));
                         return;
                       //}
                     }
@@ -619,6 +682,7 @@ router.post('/sunRun', function(req, res) {
                 return;
               }
               else{
+                data.endTime = Date.now();
                 data.speed.push(req.body.speed);
                 data.uvIndex.push(req.body.uv);
                 data.save(function(err){
@@ -658,7 +722,7 @@ router.post('/sunRun', function(req, res) {
                             console.log("Activity: No alert for threshold");
                             responseJson.message = "Threshold is " + deviceUsed.threshold;
                             responseJson.data = deviceUsed.threshold;
-                            res.status(200).send(JSON.stringify(responseJson));
+                            res.status(201).send(JSON.stringify(responseJson));
                             return;
                           //}
                         }
@@ -684,7 +748,7 @@ router.post('/sunRun', function(req, res) {
         responseJson.status = "Paused";
         responseJson.message = "In paused state, so all is good";
         console.log("Paused");
-        res.status(200).send(JSON.stringify(responseJson));
+        res.status().send(JSON.stringify(responseJson));
         return;
       }
       else{
@@ -734,7 +798,7 @@ router.delete('/deleteDevice', function(req, res){
 						return res.status(400).json({ error: "Error removing data from deviceData" });
 					}
 					else {
-						return res.status(200).json({ message: "Succesfully deleted device"});
+						return res.status().json({ message: "Succesfully deleted device"});
 					}
 				});
 			}

@@ -5,17 +5,22 @@ var bicyclingMET = 7.5;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 function showData(data, textStatus, jqXHR){
-	if(data.lenth > 0){
+	if(data.length > 0){
 		let deviceId = {deviceId: data[data.length - 1].userDevices[0]};
 
 		// Make buttons for different devices here
+		var email = data[data.length - 1].email;
+		var fullName = data[data.length - 1].fullName;
+		var lastAccess = data[data.length - 1].lastAccess;
 
-
+		$('#email').html(email);
+		$('#fullName').html(fullName);
+		$('#lastAccess').html(lastAccess);
 
 
 		$.ajax({
 			url: "/devices/sensorData", //TODO: Clarify actual url endpoint
-			method: 'GET', // TODO: Whys is it a POST. Shouldn't it be a GET?
+			method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
 			contentType: 'application/json',
 			headers: { 'x-auth': window.localStorage.getItem("authToken") },
 			dataType: 'json'

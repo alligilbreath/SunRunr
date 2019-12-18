@@ -25,6 +25,7 @@ router.post('/signin', function(req, res, next) {
            res.status(401).json({success : false, message : "Error authenticating. Contact support."});
          }
          else if(valid) {
+           user.lastAccess = Date.now();
             var authToken = jwt.encode({email: req.body.email}, secret);
             //Redirects to account.html (add "redirect:"/account.html")
             res.status(201).json({success:true, authToken: authToken});
