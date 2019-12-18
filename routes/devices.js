@@ -50,9 +50,10 @@ router.post("/setThreshold", function(req, res){
 });
 
 
-
+//Get all of the details for an activity
 router.get('/activityDetail', function(req, res, next){
   let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
+  res.status(200).json(lastData);
 
 });
 
