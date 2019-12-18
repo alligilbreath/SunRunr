@@ -5,6 +5,8 @@ let deviceData = require("../models/deviceData");
 let fs = require('fs');
 let jwt = require("jwt-simple");
 let request = require("request");
+var api_humid = 0;
+var api_temp = 0;
 
 /* Authenticate user */
 var secret = fs.readFileSync(__dirname + '/jwtkey').toString();
@@ -22,7 +24,9 @@ function getNewApikey() {
   return newApikey;
 }
 
-function getTempAndHumidity(lastLat, lastLong){
+function getTempAndHumidity(lat, long){
+  let lastLat = lat;
+  let lastLong = long;
   request({
     method: "GET",
     uri: "http://api.openweathermap.org/data/2.5/weather",
@@ -44,6 +48,8 @@ function getTempAndHumidity(lastLat, lastLong){
       console.log(response);
       console.log(body);
       var apiRes = JSON.parse(body);
+      console.log("Api res is ");
+      console.log(apiRes);
       return apiRes;
 
     }
@@ -168,7 +174,7 @@ router.get('/myDevices', function(req, res, next){
 });
 
 //Get all sensor data for deviceId query
-router.post('/sensorData', function(req, res, next){
+router.get('/sensorData', function(req, res, next){
   console.log("in sensor data");
 	deviceData.find({"deviceId": req.body.deviceId}).exec(function(err,data){
 		if(err){
@@ -521,8 +527,8 @@ router.post('/sunRun', function(req, res) {
             }
             var lastLong = Math.ceil(data.longitude);
             var lastLat = Math.ceil(data.latitude);
-            console.log("Last long is " + lastLong);
-            console.log("Last lat is " + lastLat);
+            //console.log("Last long is " + lastLong);
+            //console.log("Last lat is " + lastLat);
             //Get humidity and temperature for the activity
             request({
               method: "GET",
@@ -545,15 +551,27 @@ router.post('/sunRun', function(req, res) {
                 var apiRes = JSON.parse(body);
                 //console.log(apiRes);
                 console.log("Api humid " + apiRes.main.humidity);
-                console.log("APi temp " + apiRes.temp.temp);
-                data.humidity = apiRes.main.humidity;
-                data.temperature = apiRes.main.temp;
+                console.log("APi temp " + apiRes.main.temp);
+                api_humid = apiRes.main.humidity;
+                api_temp = apiRes.main.temp;
+                //data.humidity = apiRes.main.humidity;
+                //data.temperature = apiRes.main.temp;
 
               }
             });
-            var apiRes = getTempAndHumidity(lastLat, lastLong);
-            data.humidity = apiRes.main.humidity;
-            data.temperature = apiRes.main.temp;
+            //var apiRes = getTempAndHumidity(lastLat, lastLong);
+            //console.log("Outside apiRes is ");
+            //console.log(apiRes);
+            // if(apiRes == undefined){
+            //   data.humidity = 0;
+            //   data.temperature = 0;
+            // }
+            // else if(apiRes.hasOwnProperty("main")){
+            //   data.humidity = apiRes.main.humidity;
+            //   data.temperature = apiRes.main.temp;
+            // }
+            data.humidity = api_humid;
+            data.temperature = api_temp;
             data.save(function(err){
               if(err){
                 responseJson.status = "ERROR";
