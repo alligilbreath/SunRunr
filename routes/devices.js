@@ -34,7 +34,7 @@ router.post("/setThreshold", function(req, res){
       Device.findOne({"deviceId": req.body.deviceId}, function (err, device){
         if(!err){
           device.threshold = req.body.threshold;
-          return res.status(200).json(userStatus);
+          return res.status(400).json(userStatus);
         }
         else{
           return res.status(400).json({success: false, message: "Couldn't find device."})
@@ -86,7 +86,7 @@ router.get('/summary', function(req, res, next){
   }
   responseJson.duration = totalDuration;
   responseJson.uv = totalUV;
-  res.status(200).json(responseJson);
+  res.status().json(responseJson);
 });
 
 router.get('/weather', function(req, res, next){
@@ -115,7 +115,7 @@ router.get('/weather', function(req, res, next){
       var apiRes = JSON.parse(body);
       var list = apiRes.list;
       responseJson.forecast = list;
-      res.status(200).json(responseJson);
+      res.status().json(responseJson);
     }
   });
 
@@ -146,7 +146,7 @@ router.get('/status/:devid', function(req, res, next) {
         responseJson.devices.push({ "deviceId": doc.deviceId,  "lastContact" : doc.lastContact});
       }
     }
-    res.status(200).json(responseJson);
+    res.status(201).json(responseJson);
   });
 });
 
@@ -175,7 +175,7 @@ router.get('/myDevices', function(req, res, next){
 });
 
 //Change activity type
-router.post('/changeActivity', function (req, res, next)){
+router.post('/changeActivity', function (req, res, next){
   let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
   let responseJson = {message : ""};
   if(!req.body.hasOwnProperty("type")){
@@ -191,10 +191,11 @@ router.post('/changeActivity', function (req, res, next)){
       }
       else{
         responseJson.message = "Activity type changed";
-        res.status(200)
+        res.status(201).json(responseJson);
+      }
     });
   }
-}
+});
 
 //Get all sensor data for deviceId query
 router.get('/sensorData', function(req, res, next){
@@ -627,7 +628,7 @@ router.post('/sunRun', function(req, res) {
                         responseJson.message = "Threshold is " + deviceUsed.threshold;
                         console.log("STOP: threshold exceeded");
                         responseJson.data = deviceUsed.threshold;
-                        res.status(200).send(JSON.stringify(responseJson));
+                        res.status(201).send(JSON.stringify(responseJson));
                         return;
                       }
                       else{
@@ -637,7 +638,7 @@ router.post('/sunRun', function(req, res) {
                         responseJson.message = "Threshold is " + deviceUsed.threshold;
                         console.log("STOP: No alert for threshold");
                         responseJson.data = deviceUsed.threshold;
-                        res.status(200).send(JSON.stringify(responseJson));
+                        res.status(201).send(JSON.stringify(responseJson));
                         return;
                       //}
                     }
@@ -715,7 +716,7 @@ router.post('/sunRun', function(req, res) {
                             console.log("Activity: No alert for threshold");
                             responseJson.message = "Threshold is " + deviceUsed.threshold;
                             responseJson.data = deviceUsed.threshold;
-                            res.status(200).send(JSON.stringify(responseJson));
+                            res.status(201).send(JSON.stringify(responseJson));
                             return;
                           //}
                         }
@@ -741,7 +742,7 @@ router.post('/sunRun', function(req, res) {
         responseJson.status = "Paused";
         responseJson.message = "In paused state, so all is good";
         console.log("Paused");
-        res.status(200).send(JSON.stringify(responseJson));
+        res.status().send(JSON.stringify(responseJson));
         return;
       }
       else{
@@ -791,7 +792,7 @@ router.delete('/deleteDevice', function(req, res){
 						return res.status(400).json({ error: "Error removing data from deviceData" });
 					}
 					else {
-						return res.status(200).json({ message: "Succesfully deleted device"});
+						return res.status().json({ message: "Succesfully deleted device"});
 					}
 				});
 			}
