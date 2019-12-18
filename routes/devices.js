@@ -147,7 +147,7 @@ router.get('/status/:devid', function(req, res, next) {
         responseJson.devices.push({ "deviceId": doc.deviceId,  "lastContact" : doc.lastContact});
       }
     }
-    res.status(201).json(responseJson);
+    res.status(200).json(responseJson);
   });
 });
 
@@ -210,7 +210,7 @@ router.get('/sensorData', function(req, res, next){
 		else{
     //  console.log("/sensor data sent back");
       //console.log(data);
-			res.status(201).send(JSON.stringify(data));
+			res.status(200).send(JSON.stringify(data));
 		}
 	});
 });
@@ -426,7 +426,11 @@ router.post('/sunRun', function(req, res) {
 					if (err1) {
             console.log("Database find one error");
 						res.status(401).json({ error: "Database findOne error" });
+            return;
 					}
+          else{
+            data.lastContact = Date.now();
+          }
 				});
 			}
 			catch(er)
