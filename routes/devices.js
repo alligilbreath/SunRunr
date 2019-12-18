@@ -22,6 +22,35 @@ function getNewApikey() {
   return newApikey;
 }
 
+function getTempAndHumidity(lastLat, lastLong){
+  request({
+    method: "GET",
+    uri: "http://api.openweathermap.org/data/2.5/weather",
+    qs: {
+      lat: lastLat,
+      lon: lastLong,
+      APPID: "3471745d22814f7d2209675f54c3ec14"
+    }
+  }, function(err, response, body){
+    if(err){
+      console.log("API error. Error is " + err);
+      return;
+    }
+    else if((JSON.parse(body)).hasOwnProperty("error")){
+      console.log("API Error");
+      return;
+    }
+    else{
+      console.log(response);
+      console.log(body);
+      var apiRes = JSON.parse(body);
+      return apiRes;
+
+    }
+  });
+  return;
+}
+
 //Updates the threshold
 router.post("/setThreshold", function(req, res){
   if (!req.body.hasOwnProperty("deviceId")) {
@@ -499,8 +528,8 @@ router.post('/sunRun', function(req, res) {
               method: "GET",
               uri: "http://api.openweathermap.org/data/2.5/weather",
               qs: {
-                lat: 35,
-                lon: 139,
+                lat: lastLat,
+                lon: lastLong,
                 APPID: "3471745d22814f7d2209675f54c3ec14"
               }
             }, function(err, response, body){
@@ -511,16 +540,20 @@ router.post('/sunRun', function(req, res) {
                 console.log("API Error");
               }
               else{
-                console.log(response);
-                console.log(body);
+                //console.log(response);
+                //console.log(body);
                 var apiRes = JSON.parse(body);
-                console.log(apiRes);
+                //console.log(apiRes);
                 console.log("Api humid " + apiRes.main.humidity);
                 console.log("APi temp " + apiRes.temp.temp);
                 data.humidity = apiRes.main.humidity;
                 data.temperature = apiRes.main.temp;
+
               }
             });
+            var apiRes = getTempAndHumidity(lastLat, lastLong);
+            data.humidity = apiRes.main.humidity;
+            data.temperature = apiRes.main.temp;
             data.save(function(err){
               if(err){
                 responseJson.status = "ERROR";
@@ -532,7 +565,7 @@ router.post('/sunRun', function(req, res) {
               else{
                 try{
                   //See if with new data warrants an alert
-                  deviceData.findOne({"deviceId": req.body.deviceId}).limit(1).exec(function(err1, data)
+                  deviceData.findOne({"deviceId": req.body.deviceId}).sort('-startTime').exec(function(err1, data)
                   {
                     if (err1) {
                       console.log("STOP: database findone error")
@@ -575,8 +608,6 @@ router.post('/sunRun', function(req, res) {
                 }
               }
             }); //end of saving data
-            console.log("Humidity is: " + data.humidity);
-            console.log("Temperature is: " + data.temperature);
           } //end of else
           });
       } //end of stop status
