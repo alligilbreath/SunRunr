@@ -50,11 +50,36 @@ router.post("/setThreshold", function(req, res){
 });
 
 router.get('/summary'), function(req, res, next){
+  let responseJson = {dataPoints : [], duration : 0, uv : 0};
   let dataPoints = deviceData.find({"deviceId" : req.body.deviceId});
   let currDate = Date.now();
+  let pastDate = Date.now();
+  pastDate.setDate(currDate.getDate() - 1);
+  let pastData = [];
   for (var i = 0; i < dataPoints.length; i++){
-
+    var currData = dataPoints[i];
+    if(currData.endTime.getTime() > pastDate.getTime()){
+      pastData.push(currData);
+    }
   }
+  responseJson.dataPoints = pastData;
+  if(pastData.length == 0){
+    res.status(400).json("No data for past 7 days");
+    return;
+  }
+  let totalDuration = 0;
+  let totalUV = 0;
+  for(var i = 0; i < pastData.length; i++){
+    totalDuration += pastData[i].duration;
+    if((pastData[i].uvIndex).length != 0){
+      for(var j = 0; j < (pastData[i].uvIndex).length; j++){
+        totalUV += (pastData[i].uvIndex)[j];
+      }
+    }
+  }
+  responseJson.duration = totalDuration;
+  responseJson.uv = totalUV;
+  res.status(200).json(responseJson);
 }
 
 router.get('/weather', function(req, res, next){
