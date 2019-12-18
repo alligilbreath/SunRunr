@@ -56,23 +56,31 @@ router.get('/summary'), function(req, res, next){
 
 router.get('/weather', function(req, res, next){
   let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
+  let responseJson = { forecast : []};
   lastLat = lastData.latitude;
   lastLong = lastData.longitude;
   request({
     method: "GET",
-    uri: "https://samples.openweathermap.org/data/2.5/forecast",
+    uri: "http://api.openweathermap.org/data/2.5/forecast",
     qs: {
       lat: lastLat,
-      log: lastLong,
-      appid: "3471745d22814f7d2209675f54c3ec14"
+      lon: lastLong,
+      APPID: "3471745d22814f7d2209675f54c3ec14"
     }
   }, function(err, response, body){
-    var apiRes = JSON.parse(body);
-    var list = apiRes.list;
-    var locals = {
-
+    if(err){
+      let errorMsg = {"message": err};
+      res.status(400).json(errorMsg);
     }
-    res.status(400);
+    else if(JSON.parse(body).hasOwnProperty("error")){
+      let errorMsg = {"message" : JSON.parse(body).error};
+      res.status(400).json(errorMsg);
+    }
+    else{
+      var apiRes = JSON.parse(body);
+      var list = apiRes.list;
+      res.status(200).json(responseJson);
+    }
   });
 
 });
@@ -447,7 +455,7 @@ router.post('/sunRun', function(req, res) {
         }
       //if we're stopping the activity
       else if (req.body.status == "stop") {
-        deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data){
+        deviceData.findOne({"deviceId": req.body.deviceId}).sort('-startTime').exec(function(err1, data){
           if (err1){
             responseJson.status = "ERROR";
             console.log("STOP: Error finding devicedata");
@@ -489,18 +497,26 @@ router.post('/sunRun', function(req, res) {
             //Get humidity and temperature for the activity
             request({
               method: "GET",
-              uri: "https://samples.openweathermap.org/data/2.5/weather",
+              uri: "http://api.openweathermap.org/data/2.5/weather",
               qs: {
-                lat: lastLat,
-                log: lastLong,
-                appid: "3471745d22814f7d2209675f54c3ec14"
+                lat: 35,
+                lon: 139,
+                APPID: "3471745d22814f7d2209675f54c3ec14"
               }
             }, function(err, response, body){
               if(err){
-                console.log("API error");
+                console.log("API error. Error is " + err);
+              }
+              else if((JSON.parse(body)).hasOwnProperty("error")){
+                console.log("API Error");
               }
               else{
+                console.log(response);
+                console.log(body);
                 var apiRes = JSON.parse(body);
+                console.log(apiRes);
+                console.log("Api humid " + apiRes.main.humidity);
+                console.log("APi temp " + apiRes.temp.temp);
                 data.humidity = apiRes.main.humidity;
                 data.temperature = apiRes.main.temp;
               }
@@ -526,7 +542,7 @@ router.post('/sunRun', function(req, res) {
                     else
                     {
                       let deviceUsed = Device.findOne({"deviceId": req.body.deviceId});
-                      if(data.uvIndex[data.uvIndex.length] > deviceUsed.threshold)
+                      if(data.uvIndex[data.uvIndex.length - 1] > deviceUsed.threshold)
                       {
                         responseJson.status = "Alert";
                         responseJson.message = "Threshold is " + deviceUsed.threshold;
@@ -559,12 +575,14 @@ router.post('/sunRun', function(req, res) {
                 }
               }
             }); //end of saving data
+            console.log("Humidity is: " + data.humidity);
+            console.log("Temperature is: " + data.temperature);
           } //end of else
           });
       } //end of stop status
       //If we are updating the speed and uvindex values
       else if (req.body.status == "activity"){
-          deviceData.findOne({"deviceId": req.body.deviceId}).exec(function(err1, data){
+          deviceData.findOne({"deviceId": req.body.deviceId}).sort('-startTime').exec(function(err1, data){
             if(err1){
               responseJson.status = "ERROR";
               console.log("Activity: erorr finding devicedata" + err1);
@@ -604,7 +622,7 @@ router.post('/sunRun', function(req, res) {
                         else
                         {
                           let deviceUsed = Device.findOne({"deviceId": req.body.deviceId});
-                          if(data.uvIndex[data.uvIndex.length] > deviceUsed.threshold)
+                          if(data.uvIndex[data.uvIndex.length - 1] > deviceUsed.threshold)
                           {
                             responseJson.status = "Alert";
                             console.log("Activity: Alert for threshold");
