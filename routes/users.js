@@ -47,19 +47,21 @@ router.post('/register', function(req, res, next) {
          res.status(400).json({success : false, message : err.errmsg});
       }
       else {
+        console.log(req.body.email);
         var newUser = new User ({
             email: req.body.email,
             fullName: req.body.fullName,
             passwordHash: hash,
             lastAccess: Date.now(),
             userDevices: [],
-            threshold: req.body.threshold
+            threshold: 1000
         });
 
         newUser.save(function(err, user) {
           if (err) {
             console.log("User already exists with that token");
-             res.status(400).json({success : false, message : err.errmsg});
+            console.log(err);
+             res.status(400).json({success : false, message : err.message});
           }
           else {
             console.log("User created");
