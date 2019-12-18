@@ -5,7 +5,7 @@ var bicyclingMET = 7.5;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 function showData(data, textStatus, jqXHR){
-	if(data.lenth > 0){
+	if(data.length > 0){
 		let deviceId = {deviceId: data[data.length - 1].userDevices[0]};
 
 		// Make buttons for different devices here

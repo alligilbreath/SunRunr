@@ -51,6 +51,7 @@ router.post("/setThreshold", function(req, res){
 
 router.get('/summary'), function(req, res, next){
   let dataPoints = deviceData.find({"deviceId" : req.body.deviceId});
+  let currDate = Date.now();
   for (var i = 0; i < dataPoints.length; i++){
 
   }
@@ -81,6 +82,7 @@ router.get('/weather', function(req, res, next){
     else{
       var apiRes = JSON.parse(body);
       var list = apiRes.list;
+      responseJson.forecast = list;
       res.status(200).json(responseJson);
     }
   });
