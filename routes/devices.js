@@ -27,23 +27,23 @@ function getNewApikey() {
 //Updates the threshold
 router.post("/setThreshold", function(req, res){
   if (!req.body.hasOwnProperty("deviceId")) {
-     return res.status(401).json({success: false, message: "Missing deviceId in request"});
+     return res.status(400).json({success: false, message: "Missing deviceId in request"});
   }
   else{
     try {
       Device.findOne({"deviceId": req.body.deviceId}, function (err, device){
         if(!err){
           device.threshold = req.body.threshold;
-          return res.status(201).json(userStatus);
+          return res.status(201).json({success: true, message: "Threshold updated."});
         }
         else{
-          return res.status(400).json({success: false, message: "Threshold updated."})
+          return res.status(400).json({success: false, message: "Device does not exist."})
         }
       });
 
     }
     catch{
-      return res.status(401).json({success: false, message: "Couldn't change threshold."});
+      return res.status(400).json({success: false, message: "Couldn't change threshold."});
     }
   }
 
