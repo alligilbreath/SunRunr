@@ -34,10 +34,10 @@ router.post("/setThreshold", function(req, res){
       Device.findOne({"deviceId": req.body.deviceId}, function (err, device){
         if(!err){
           device.threshold = req.body.threshold;
-          return res.status(400).json(userStatus);
+          return res.status(201).json(userStatus);
         }
         else{
-          return res.status(400).json({success: false, message: "Couldn't find device."})
+          return res.status(400).json({success: false, message: "Threshold updated."})
         }
       });
 
