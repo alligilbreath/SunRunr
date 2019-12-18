@@ -33,12 +33,16 @@ function sendRegisterRequest() {
     $("#ServerResponse").show();
 	  return;
   }
+<<<<<<< HEAD
+  
+=======
 
 
 
   // TODO: Hash and salt the password?
   // Answer: Already done that in one of the endpoints
 
+>>>>>>> 5e72a8999c3318c1d9adb1d77e11db52d9d6b3f2
   let newAccountInfo = {email: email, fullName: userFullName, password: password};
 
   $.ajax({
@@ -59,7 +63,7 @@ function makeNewAcc(data, textStatus, jqXHR) {
 	// Is it same as from login.js?
 	//TODO: Under router.post('/register'...){...} of routes/user.js, shouldn't there be an authToken?
 	window.localStorage.setItem('authToken', data.authToken);
-	window.location = "userPage.html"; // Taken back to login where they can TODO: Should remove this and jsut take user to their account page
+	window.location = "userPage.html";
 }
 
 function registerError(jqXHR, textStatus, errorThrown) {

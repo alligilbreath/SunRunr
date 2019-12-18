@@ -32,7 +32,7 @@ $(function(){
     $('.tabs').tabs();
 	$('.dropdown-trigger').dropdown();
 
-	$('#home').click(function(){
+	$('#Home').click(function(){
 		window.location = "userPage.html"; // Take user back to their main page
 	});
 });

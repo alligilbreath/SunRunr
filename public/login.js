@@ -4,9 +4,8 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 	let userPassword = $("#password").val();
 
 	let infoToPass = {email: userEmail, password: userPassword};
-	// TODO:
+
 	$.ajax({
-		//  TODO: IS IT "routes/users/signin" ?
 		url: "/users/signin", //TODO: What is the specific url/endpoint needed for routes/users.js?
 		type: "POST", // POST as mentioned in the the user.js routes file
 		contentType: "application/json",
@@ -19,9 +18,13 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 }
 
 	// This function is called when user email and password exist in database, sending user to their Account page
+<<<<<<< HEAD
+	function redirectToAccount(data, textSatus, jqXHR){ 		
+=======
 	function redirectToAccount(data, textSatus, jqXHR){
 		// TODO: Set up user authentication token(?) ANSWER: probably not... already made in routes.users.js
 
+>>>>>>> 5e72a8999c3318c1d9adb1d77e11db52d9d6b3f2
 		window.localStorage.setItem('authToken', data.authToken);
 		window.location = "userPage.html";
 	}
@@ -48,7 +51,6 @@ function verifyLogIn(){ // Verify that user email and password entered exists in
 //Handle authentication on page load
 $(function() {
 
-  // TODO: rewrite this, as this was taken from Holz example, and review user authentication chapter on Zybooks
   // Redirect user to their page if they haven't closed their window yet (I think...?)
   if( window.localStorage.getItem('authToken')) {
     window.location = 'userPage.html';
