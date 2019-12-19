@@ -90,7 +90,7 @@ function summaryViewUpdate(){
 		url: "/devices/summary",
 		method: 'GET',
 		contentType: 'application/json',
-		data: {deviceId: device},
+		data: JSON.stringify(deviceId),
 		headers: { 'x-auth': window.localStorage.getItem("authToken") },
 		dataType: 'json'
 	})
@@ -98,7 +98,7 @@ function summaryViewUpdate(){
 
 			var showWeekData = "";
 
-			let showDuration = data.totalDuration;
+			let showDuration = data.duration;
 
 			let calBurnedWeek = 0;
 
@@ -117,9 +117,9 @@ function summaryViewUpdate(){
 			}
 
 			showWeekData = "<ul>"
-			+ "<li> Total Time Spent Exercising" + showDuration + "</li>"
-			+ "<li> Total Calories Burned" + showDuration + "</li>"
-			+ "<li> Total UV Exposure" + data.totalUV + "</li>"
+			+ "<li> Total Time Spent Exercising " + showDuration + "</li>"
+			+ "<li> Total Calories Burned " + calBurnedWeek + "</li>"
+			+ "<li> Total UV Exposure " + data.uv + "</li>"
 			+"</ul>";
 
 			$('#summaryView').html(showWeekData);

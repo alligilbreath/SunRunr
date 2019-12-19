@@ -52,42 +52,69 @@ router.post("/setThreshold", function(req, res){
 
 //Get all of the details for an activity
 router.get('/activityDetail', function(req, res, next){
-  let lastData = deviceData.find({req.query.deviceId}).sort({_id:-1}).limit(1);
-  res.status(200).json(lastData);
-
+  console.log(req.query);
+  deviceData.find({deviceId: req.query.deviceId, speed: {$gt:{$size = 1}}}).limit(1).exec(function(err, data){
+    if(err){
+      console.log("Bad");
+      res.status(400).json({message: "error"});
+      return;
+    }
+    else{
+      res.status(200).json(data);
+      return;
+    }
+  });
 });
 
 router.get('/summary', function(req, res, next){
   let responseJson = {dataPoints : [], duration : 0, uv : 0};
-  let dataPoints = deviceData.find({"deviceId" : req.query.deviceId});
-  let currDate = Date.now();
-  let pastDate = Date.now();
-  pastDate.setDate(currDate.getDate() - 1);
-  let pastData = [];
-  for (var i = 0; i < dataPoints.length; i++){
-    var currData = dataPoints[i];
-    if(currData.endTime.getTime() > pastDate.getTime()){
-      pastData.push(currData);
+  console.log(req.query);
+  deviceData.find({"deviceId" : req.query.deviceId}).exec(function(err, data){
+    if(err){
+      res.status(400).json({message: "couldn't find summary"});
+      return;
     }
-  }
-  responseJson.dataPoints = pastData;
-  if(pastData.length == 0){
-    res.status(400).json("No data for past 7 days");
-    return;
-  }
-  let totalDuration = 0;
-  let totalUV = 0;
-  for(var i = 0; i < pastData.length; i++){
-    totalDuration += pastData[i].duration;
-    if((pastData[i].uvIndex).length != 0){
-      for(var j = 0; j < (pastData[i].uvIndex).length; j++){
-        totalUV += (pastData[i].uvIndex)[j];
+    console.log("Found them");
+    console.log(data);
+    let currDate = Date.now();
+    let pastDate = Date.now() - 7;
+    //pastDate.setDate(currDate.getDate() - 1);
+    let pastData = [];
+    for (var i = 0; i < data.length; i++){
+      var currData = data[i];
+      if(currData.endTime > pastDate){
+        pastData.push(currData);
       }
     }
-  }
-  responseJson.duration = totalDuration;
-  responseJson.uv = totalUV;
-  res.status(200).json(responseJson);
+    console.log("After first for");
+    responseJson.dataPoints = pastData;
+    console.log("dataPoints is ");
+    console.log(responseJson.dataPoints);
+    if(pastData.length == 0){
+      res.status(400).json("No data for past 7 days");
+      return;
+    }
+    console.log("After if past data empty");
+    let totalDuration = 0;
+    let totalUV = 0;
+    console.log("Total pastData length: " + pastData.length);
+    for(var i = 0; i < pastData.length; i++){
+      totalDuration += pastData[i].duration;
+      if((pastData[i].uvIndex).length != 0){
+        for(var j = 0; j < (pastData[i].uvIndex).length; j++){
+          totalUV += (pastData[i].uvIndex)[j];
+        }
+      }
+    }
+    console.log("After second for");
+    responseJson.duration += totalDuration;
+    responseJson.uv += totalUV;
+    console.log("responseJson duration " + responseJson.duration);
+    console.log("responseJson uv " + responseJson.uv);
+    res.status(200).json(responseJson);
+    return;
+  });
+
 });
 
 router.get('/weather', function(req, res, next){
@@ -219,7 +246,7 @@ router.post('/changeActivity', function (req, res, next){
 //Get all sensor data for deviceId query
 router.get('/sensorData', function(req, res, next){
   //console.log("in sensor data");
-	DeviceData.find({"deviceId": req.query.deviceId}).limit(5).exec(function(err,data){
+	deviceData.find({"deviceId": req.query.deviceId}).limit(5).exec(function(err,data){
 		if(err){
       console.log("/sensor data error");
       //wasn't returning a status
@@ -227,7 +254,7 @@ router.get('/sensorData', function(req, res, next){
 		}
 		else{
     //  console.log("/sensor data sent back");
-      //console.log(data);
+      console.log(data);
 			res.status(200).json(data);
 		}
 	});
