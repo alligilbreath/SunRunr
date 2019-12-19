@@ -26,10 +26,10 @@ function sendRegisterRequest() {
 	  "<li>at least one lower case letter</li>" +
 	  "<li>at least one number</li>" +
 	  "<li>at least one symbol</li>" +
-	  "</ul>" +
-	  "ie) Jello1#, H4p&py, $2Meep, HELlo432%";
+	  "</ul>" //+
+	  //"ie) Jello1#, H4p&py, $2Meep, HELlo432%";
 
-    $("#ServerResponse").text(passwordNeeded);
+    $("#ServerResponse").html(passwordNeeded);
     $("#ServerResponse").show();
 	  return;
   }

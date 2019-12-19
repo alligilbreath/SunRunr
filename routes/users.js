@@ -62,7 +62,7 @@ router.post('/register', function(req, res, next) {
           if (err) {
             console.log("User already exists with that token");
             console.log(err);
-             res.status(400).json({success : false, message : err.message});
+             res.status(400).json({success : false, message : "User already exists with that email."});
           }
           else {
             console.log("User created");
