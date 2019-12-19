@@ -84,17 +84,23 @@ router.get("/account" , function(req, res) {
 
    try {
       var decodedToken = jwt.decode(authToken, secret);
-      var userStatus = {};
+      var userStatus = {
+        success = false,
+        email = "",
+        fullName = "",
+        lastAccess = Date.now(),
+        devices = []
+      };
 
       User.findOne({email: decodedToken.email}, function(err, user) {
          if(err) {
             return res.status(400).json({success: false, message: "User does not exist."});
          }
          else {
-            userStatus['success'] = true;
-            userStatus['email'] = user.email;
-            userStatus['fullName'] = user.fullName;
-            userStatus['lastAccess'] = Date.now();
+            userStatus.success = true;
+            userStatus.email = user.email;
+            userStatus.fullName = user.fullName;
+            userStatus.lastAccess = Date.now();
 
             // Find devices based on decoded token
 		      Device.find({ userEmail : decodedToken.email}, function(err, devices) {
@@ -107,7 +113,7 @@ router.get("/account" , function(req, res) {
 				               apikey: device.apikey,
 				         });
 			         }
-			         userStatus['devices'] = deviceList;
+			         userStatus.devices = deviceList;
 			      }
 
                return res.status(200).json(userStatus);

@@ -16,7 +16,7 @@ var device = "3a0030001851373237343331";
 ///////////////////////////////////////////////////////////////////////////////////////
 function showData(data, textStatus, jqXHR){
 	if(data != null){
-		let deviceId = {deviceId: data[data.length - 1].userDevices[0]};
+		let deviceId = {deviceId: data.devices[0]};
 
 		// Make buttons for different devices here
 		var email = data.email; // old version: data[data.length - 1].email
@@ -27,12 +27,12 @@ function showData(data, textStatus, jqXHR){
 		$('#fullName').html(fullName);
 		$('#lastAccess').html(lastAccess);
 
-
+		let deviceId = {deviceId: device};
 		$.ajax({
 			url: "/devices/sensorData", //TODO: Clarify actual url endpoint
 			method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
 			contentType: 'application/json',
-			data: {deviceID : device},
+			data: JSON.stringify(deviceId),
 			headers: { 'x-auth': window.localStorage.getItem("authToken") },
 			dataType: 'json'
 		 })
@@ -80,7 +80,7 @@ function displayData(data, textStatus, jqXHR){
 }
 
 function showError(jqXHR, textStatus, errorThrown){
-	$("#errorDispl").text("Error: " + jqXHR.responseJSON.message);
+	$("#errorDispl").text("Error: " + jqXHR.responseJson.message);
 }
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -164,10 +164,10 @@ function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, acti
 		contentType: 'application/json',
 		data: {deviceID : device},
 		headers: { 'x-auth': window.localStorage.getItem("authToken") },
-		dataType: 'json'		
+		dataType: 'json'
 	})
 	.done(function(data, textStatus, jqXHR){
-		
+
 		let durationMin = data.duration * (1/1000) * (1/60);
 		let durationHour = data.duration * (1/1000) * (1/60) * (1/60);
 		let caloriesBurned = 0;
@@ -183,16 +183,16 @@ function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, acti
 		else{ caloriesBurned = walkCalPerHour * durationHour; }
 
 
-		let dispData = "<ul>" 
+		let dispData = "<ul>"
 		+ "<li>Date: " + data.startTime + "</li>"
 		+ "<li>Duration (Minutes): " + durationMin + "</li>"
 		+ "<li>Temperature: " + data.temperature + "</li>"
 		+ "<li>Humidity: " + data.humidity + "</li>"
 		+ "<li>Activity Type: " + data.activityType + "</li>"
-		+ "<li>Calories Burned: " + caloriesBurned + "</li>"		
+		+ "<li>Calories Burned: " + caloriesBurned + "</li>"
 		+ "</ul>";
 
-		$('#activityData').html(dispData);		
+		$('#activityData').html(dispData);
 
 
 
