@@ -32,7 +32,7 @@ function showData(data, textStatus, jqXHR){
 			url: "/devices/sensorData", //TODO: Clarify actual url endpoint
 			method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
 			contentType: 'application/json',
-			data: {deviceID : }
+			data: {deviceID : device},
 			headers: { 'x-auth': window.localStorage.getItem("authToken") },
 			dataType: 'json'
 		 })
@@ -135,7 +135,7 @@ function summaryViewUpdate(){
 
 function activitySummaryUpdate(){
 	$.ajax({
-		url: "/devices/sensorData"
+		url: "/devices/sensorData",
 		method: "GET",
 		contentType: 'application/json',
 		data: {deviceId: device},
