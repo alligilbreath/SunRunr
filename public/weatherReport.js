@@ -1,38 +1,38 @@
 function showWeather(data, textStatus, jqXHR){
 
-	let today = "<ul>" + 
-	"<li>Temperature: " + data.list.main.temp +
+	let today = "<ul>" +
+	"<li>Temperature: " + data.list[0].main.temp +
 	"<li>UV" + 6.0 +
-	"<li>Humidity: " + data.list.main.humidity +
-	"<li>Weather" + data.list.weather.main +
+	"<li>Humidity: " + data.list[0].main.humidity +
+	"<li>Weather" + data.list[0].weather.main +
 	+ "</ul>";
 
-	let day2 = "<ul>" + "" 
-	"<li>Temperature: " + data.list.main.temp +
-	"<li>UV" + 7.2 +	
-	"<li>Humidity: " + data.list.main.humidity +
-	"<li>Weather" + data.list.weather.main +
+	let day2 = "<ul>" + ""
+	"<li>Temperature: " + data.list[1].main.temp +
+	"<li>UV" + 7.2 +
+	"<li>Humidity: " + data.list[1].main.humidity +
+	"<li>Weather" + data.list.[1]weather.main +
 	"</ul>";
 
-	let day3 = "<ul>" + 
-	"<li>Temperature: " + data.list.main.temp +
+	let day3 = "<ul>" +
+	"<li>Temperature: " + data.list[2].main.temp +
 	"<li>UV" + 6.9 +
-	"<li>Humidity: " + data.list.main.humidity +
-	"<li>Weather" + data.list.weather.main +
+	"<li>Humidity: " + data.list[2].main.humidity +
+	"<li>Weather" + data.list[2].weather.main +
 	"</ul>";
 
-	let day4 = "<ul>" + "" 
-	"<li>Temperature: " + data.list.main.temp +
+	let day4 = "<ul>" + ""
+	"<li>Temperature: " + data.list[3].main.temp +
 	"<li>UV" + 6.5 +
-	"<li>Humidity: " + data.list.main.humidity +
-	"<li>Weather" + data.list.weather.main +
+	"<li>Humidity: " + data.list[3].main.humidity +
+	"<li>Weather" + data.list[3].weather.main +
 	"</ul>";
 
-	let day5 = "<ul>" + "" 
-	"<li>Temperature: " + data.list.main.temp +
+	let day5 = "<ul>" + ""
+	"<li>Temperature: " + data.list[4].main.temp +
 	"<li>UV" + 7.9 +
-	"<li>Humidity: " + data.list.main.humidity +
-	"<li>Weather" + data.list.weather.main +
+	"<li>Humidity: " + data.list[4].main.humidity +
+	"<li>Weather" + data.list[4].weather.main +
 	"</ul>";
 
 
