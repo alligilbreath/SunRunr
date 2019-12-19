@@ -72,7 +72,7 @@ function displayData(data, textStatus, jqXHR){
 
 		summaryViewUpdate();
 		activitySummaryUpdate();
-		//activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, activityType);
+		activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, activityType);
 
 	}
 
@@ -158,75 +158,122 @@ function activitySummaryUpdate(){
 
 function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, activityType){
 
-	// Graphing Speed and UV Exposure
-	////////////////////////////////////////////////////////////////////////////////////////////
-	let speedData = [];
-	// Iterate through userSpeed array and store each value as an object {y: speed}
-	// because CanvaJS takes data as an array w/ object elements (i.e. [{y:1}, {y:2}, ...])
-	for(var speed of userSpeed){
-		var tempSpeedObj = {y: speed};
-		speedData.push(tempSpeedObj);
-	}
+	$.ajax({
+		url: "/devices/activityDetail", //TODO: Clarify actual url endpoint
+		method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
+		contentType: 'application/json',
+		data: {deviceID : device},
+		headers: { 'x-auth': window.localStorage.getItem("authToken") },
+		dataType: 'json'		
+	})
+	.done(function(data, textStatus, jqXHR){
+		
+		let durationMin = data.duration * (1/1000) * (1/60);
+		let durationHour = data.duration * (1/1000) * (1/60) * (1/60);
+		let caloriesBurned = 0;
 
-	// Then graph data using CanvasJS
-	var speedChart = new CanvasJS.Chart("speedChart", {
-		animationEnabled: true,
-		theme: "light2",
-		title:{
-			text: "Speed During Activity"
-		},
-		axisY:{
-			title: "Speed (mph)",
-			includeZero: false
-		},
-		axisX:{
-			title: "Time (min)"
-		},
-		data: [{
-			type: "line",
-			dataPoints: speedData
-		}]
+		if(data.activityType == "bicycling"){
+			caloriesBurned = bicycleCalPerHour * durationHour;
+		}
+		else if(data.activityType == "jogging"){
+			caloriesBurned = jogCalPerHour * durationHour;
+
+		}
+		// walking as else
+		else{ caloriesBurned = walkCalPerHour * durationHour; }
+
+
+		let dispData = "<ul>" 
+		+ "<li>Date: " + data.startTime + "</li>"
+		+ "<li>Duration (Minutes): " + durationMin + "</li>"
+		+ "<li>Temperature: " + data.temperature + "</li>"
+		+ "<li>Humidity: " + data.humidity + "</li>"
+		+ "<li>Activity Type: " + data.activityType + "</li>"
+		+ "<li>Calories Burned: " + caloriesBurned + "</li>"		
+		+ "</ul>";
+
+		$('#activityData').html(dispData);		
+
+
+
+		// Graphing Speed and UV Exposure
+		////////////////////////////////////////////////////////////////////////////////////////////
+		let speedData = [];
+		// Iterate through userSpeed array and store each value as an object {y: speed}
+		// because CanvaJS takes data as an array w/ object elements (i.e. [{y:1}, {y:2}, ...])
+		for(var speed of userSpeed){
+			var tempSpeedObj = {y: speed};
+			speedData.push(tempSpeedObj);
+		}
+
+		// Then graph data using CanvasJS
+		var speedChart = new CanvasJS.Chart("speedChart", {
+			animationEnabled: true,
+			theme: "light2",
+			title:{
+				text: "Speed During Activity"
+			},
+			axisY:{
+				title: "Speed (mph)",
+				includeZero: false
+			},
+			axisX:{
+				title: "Time (min)"
+			},
+			data: [{
+				type: "line",
+				dataPoints: speedData
+			}]
+		});
+		speedChart.render();
+
+		//
+
+
+		//same for uv index
+		let uvData = [];
+		// Iterate through uv array
+		for(var uvIndex of uv){
+			var tempUVObj = {y: uvIndex};
+			speedData.push(tempUVObj);
+		}
+
+		// Then graph data using CanvasJS
+		var uvChart = new CanvasJS.Chart("uvChart", {
+			animationEnabled: true,
+			theme: "light2",
+			title:{
+				text: "UV Exposure During Activity"
+			},
+			axisY:{
+				title: "UV",
+				includeZero: false
+			},
+			axisX:{
+				title: "Time (min)"
+			},
+			data: [{
+				type: "line",
+				dataPoints: uvData
+			}]
+		});
+		uvChart.render();
+		////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+	})
+	.fail(function(jqXHR, textStatus, errorThrown){
+
 	});
-	speedChart.render();
-
-	//
-
-
-	//same for uv index
-	let uvData = [];
-	// Iterate through uv array
-	for(var uvIndex of uv){
-		var tempUVObj = {y: uvIndex};
-		speedData.push(tempUVObj);
-	}
-
-	// Then graph data using CanvasJS
-	var uvChart = new CanvasJS.Chart("uvChart", {
-		animationEnabled: true,
-		theme: "light2",
-		title:{
-			text: "UV Exposure During Activity"
-		},
-		axisY:{
-			title: "UV",
-			includeZero: false
-		},
-		axisX:{
-			title: "Time (min)"
-		},
-		data: [{
-			type: "line",
-			dataPoints: uvData
-		}]
-	});
-	uvChart.render();
-	////////////////////////////////////////////////////////////////////////////////////////////
 
 }
 
 
 
-
+/*
 function WalkingActivityDetails(){
 	$.ajax({
 		url: "/devices/sensorData",
@@ -410,7 +457,7 @@ function JoggingActivityDetails(){
 }
 
 function BicyclingActivityDetails(){}
-
+*/
 
 
 ////////////////////////////////////////////////////////////////////////////////////
