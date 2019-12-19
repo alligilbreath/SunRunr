@@ -15,7 +15,7 @@ var device = "3a0030001851373237343331";
 
 ///////////////////////////////////////////////////////////////////////////////////////
 function showData(data, textStatus, jqXHR){
-	if(data != NULL){
+	if(data != null){
 		let deviceId = {deviceId: data[data.length - 1].userDevices[0]};
 
 		// Make buttons for different devices here
@@ -58,7 +58,7 @@ function displayData(data, textStatus, jqXHR){
 
 	//var longi = data[data.length - 1].longitude;
 	//var lati = data[data.length - 1].latitude;
-	if(data != NULL){
+	if(data != null){
 		var userSpeed = data[data.length - 1].speed;// The entire array of speed; TODO: gonna need to parse this data and store it in a new variable (an array with object elements: [{y: 0}]) for CanvasJS
 		var uv = data[data.length - 1].uvIndex; 	// The entire array of uvIndex; TODO: gonna need to parse this data and store it in a new variable (an array with object elements: [{y: 0}]) for CanvasJS
 		var startTime = data[data.length - 1].startTime;
