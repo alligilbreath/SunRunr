@@ -16,7 +16,7 @@ var device = "3a0030001851373237343331";
 ///////////////////////////////////////////////////////////////////////////////////////
 function showData(data, textStatus, jqXHR){
 	if(data != null){
-		let deviceId = {deviceId: data.devices[0].deviceId};
+		let deviceId = {"deviceId": data.devices[0].deviceId};
 
 		// Make buttons for different devices here
 		var email = data.email; // old version: data[data.length - 1].email
@@ -31,7 +31,7 @@ function showData(data, textStatus, jqXHR){
 			url: "/devices/sensorData", //TODO: Clarify actual url endpoint
 			method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
 			contentType: 'application/json',
-			data: JSON.stringify(deviceId),
+			data: deviceId,
 			headers: { 'x-auth': window.localStorage.getItem("authToken") },
 			dataType: 'json'
 		 })
@@ -85,12 +85,13 @@ function showError(jqXHR, textStatus, errorThrown){
 
 ////////////////////////////////////////////////////////////////////////////////////
 function summaryViewUpdate(){
+	let deviceId = {"deviceId": "3a0030001851373237343331"};
 
 	$.ajax({
 		url: "/devices/summary",
 		method: 'GET',
 		contentType: 'application/json',
-		data: JSON.stringify(deviceId),
+		data: deviceId,
 		headers: { 'x-auth': window.localStorage.getItem("authToken") },
 		dataType: 'json'
 	})
@@ -132,16 +133,17 @@ function summaryViewUpdate(){
 }
 
 function activitySummaryUpdate(){
+	let deviceId = {"deviceId": "3a0030001851373237343331"};
 	$.ajax({
 		url: "/devices/sensorData",
 		method: "GET",
 		contentType: 'application/json',
-		data: {deviceId: device},
+		data: deviceId,
 		headers: { 'x-auth': window.localStorage.getItem("authToken") },
 		dataType: 'json'
 	})
 	.done(function(data, textStatus, jqXHR){
-		var innerHTML = "";
+		var innerHTML = "it's here";
 		for(var i = 0; i < data.length; i++){
 			var activityType = data[i].activityType;
 			var date = data[i].startTime;
@@ -151,6 +153,7 @@ function activitySummaryUpdate(){
 			var temp = data[i].temperature;
 			var humid = data[i].humidity;
 			let timeDuration = duration * (1/1000) * (1/60) * (1/60);
+			let calBurned = 0;
 			if(data[i].activityType == "bicycling"){
 				calBurned += bicycleCalPerHour * timeDuration;
 			}
@@ -160,7 +163,7 @@ function activitySummaryUpdate(){
 			}
 			// walking as else
 			else{ calBurned += walkCalPerHour * timeDuration; }
-		}
+
 			innerHTML += "<li class=\"collection-item\"> Activity: " + activityType + "</li>";
 			innerHTML += "<li class=\"collection-item\"> Date: " + dateString + "</li>";
 			innerHTML += "<li class=\"collection-item\"> Duration [ms]: " + duration + "</li>";
@@ -169,6 +172,7 @@ function activitySummaryUpdate(){
 			innerHTML += "<li class=\"collection-item\"> Temperature: " + temp + "</li>";
 			innerHTML += "<li class=\"collection-item\"> Humidity:  " + humid + "</li>";
 		}
+		$('#activitySummary').html(innerHTML);
 	})
 	.fail(function(jqXHR, textStatus, errorThrown){
 
@@ -176,12 +180,13 @@ function activitySummaryUpdate(){
 }
 
 function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, activityType){
+	let deviceId = {"deviceId": "3a0030001851373237343331"};
 
 	$.ajax({
 		url: "/devices/activityDetail", //TODO: Clarify actual url endpoint
 		method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
 		contentType: 'application/json',
-		data: {deviceID : device},
+		data: deviceId,
 		headers: { 'x-auth': window.localStorage.getItem("authToken") },
 		dataType: 'json'
 	})

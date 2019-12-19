@@ -245,17 +245,20 @@ router.post('/changeActivity', function (req, res, next){
 
 //Get all sensor data for deviceId query
 router.get('/sensorData', function(req, res, next){
-  //console.log("in sensor data");
+  console.log("in sensor data");
+  console.log(req.query);
 	deviceData.find({"deviceId": req.query.deviceId}).limit(5).exec(function(err,data){
 		if(err){
       console.log("/sensor data error");
       //wasn't returning a status
 			res.status(400).send("Error has occured");
+      return;
 		}
 		else{
-    //  console.log("/sensor data sent back");
+      console.log("/sensor data sent back");
       console.log(data);
 			res.status(200).json(data);
+      return;
 		}
 	});
 });

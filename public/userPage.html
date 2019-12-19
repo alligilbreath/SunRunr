@@ -11,7 +11,7 @@
 	  <!-- Compiled and minified CSS -->
 	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 	  <!-- Compiled and minified JavaScript -->
-	  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>	  
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
      <!-- Imports CanvasJS, for the Line Charts -->
      <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -19,7 +19,7 @@
 
       <link href="stylesheets/style.css" rel="stylesheet">
       <script src="userPage.js" defer></script>
-      
+
       <meta name="viewport" content="width=device-width, initial-scale=1">
    </head>
 
@@ -31,11 +31,11 @@
             <li><a href="#" id="logOut">Log Out</a></li>
             <li><a href="#" id="weatherReport">Weather Report</a></li>
    		</ul>
-				 
+
 			<nav>
 			  <div class="nav-wrapper #f57c00 orange darken-2">
 			   <span id="siteTitle">SunRunr</span>
-			   
+
 			   <ul class="right ">
 				  <!-- Dropdown Trigger -->
 				  <li><a class='dropdown-trigger btn' href='#' data-target='dropdown1'><i class="material-icons">more_vert</i></a></li>
@@ -50,7 +50,7 @@
 
 
       <div class="col s12 m12 " >
-                  
+
                   <div class="row" id="main1">
                   <ul class="collapsible">
                      <li>
@@ -64,16 +64,16 @@
                               <li class="collection-item">Name: <span id="fullName"></span></li>
                               <li class="collection-item">Last Access: <span id="lastAccess"></span></li>
                               <!--TODO: Remember to update the button below later-->
-                              <button id="changeAccInfo" class="waves-effect waves-light btn">Change Account Info</button> 
+                              <button id="changeAccInfo" class="waves-effect waves-light btn">Change Account Info</button>
                            </ul>
                         </div>
                      </li>
                   </ul>
                   </div>
-               
+
                   <div class="row" id="main2">
-                     
-                  
+
+
                      <div class="row">
                         <div class="col s12 m6">
                           <div class="card #ffffff white">
@@ -87,11 +87,11 @@
                           </div>
                         </div>
                       </div>
-                  
-                  
-                  
-                  
-                  
+
+
+
+
+
                      <!-- Old Code: trying to display data using tabs
                      <ul id="weekSummary" class="tabs">
                      <li class = "tab col s1"><a href = "#day1">Day 1</a></li>
@@ -103,7 +103,7 @@
                      <li class = "tab col s1"><a class="active" href = "#day7">Today</a></li>
                   </ul>
                   On Javascript, make sure to include the actual date of each tab
-                  <div class="card #ffffff white"></div>   
+                  <div class="card #ffffff white"></div>
                      <div id="day1" class="col s12 #ffffff white"><span>Date: Oct 7</span></div>
                      <div id="day2" class="col s12 #ffffff white"><span>Date: Oct 8</span></div>
                      <div id="day3" class="col s12 #ffffff white"><span>Date: Oct 9</span></div>
@@ -112,9 +112,9 @@
                      <div id="day6" class="col s12 #ffffff white"><span>Date: Oct 12</span></div>
                      <div id="day7" class="col s12 #ffffff white"><span>Date: Oct 13</span></div>
                -->
-                  
+
                   </div>
-                  
+
 
 
 
@@ -160,7 +160,7 @@
                                  </div>
                            </div>-->
 
-                        <!--Attempt at using a collapsible-->                               
+                        <!--Attempt at using a collapsible-->
                         <!--<div class="collapsible-header">Weekly Summary</div>
                         <div class="collapsible-body">
                            <ul class="collection with-header">
@@ -175,23 +175,19 @@
                      <!--</li>
 
                   </ul>-->
-                  
+
                   <div class="row" id="main3">
                   <ul class="collapsible">
                         <li>
                            <div class="collapsible-header">Activity Summary</div>
                            <div class="collapsible-body">
                               <ul class="collection with-header">
-                                 <li class="collection-header">
-                                    <!--<h5>Today's Summary</h5>-->
-                                 </li>
-                                 <li class="collection-item"><!--Email: <span id="email"></span>--></li>
-                                 <li class="collection-item"><!--Name: <span id="fullName"></span>--></li>
-                                 <li class="collection-item"><!--Last Access: <span id="lastAccess"></span>--></li>
+                                 <div id="activitySummary"></div>
+
                               </ul>
                            </div>
                         </li>
-                        
+
                      </ul>
                   </div>
 
@@ -201,40 +197,14 @@
                        <div class="card blue-grey darken-1">
                          <div class="card-content white-text">
                            <span class="card-title">Activity Details</span>
-                           
-                           <!--
-                           <button id="showWalk" class="waves-effect waves-light btn">Walking Activity Data</button>
-                           <div id="walkData">
 
-                              <div id="walkSpeedChart" style="height: 300px; width: 100%;"></div>
-                              <div id="walkUVChart" style="height: 300px; width: 100%;"></div>
-   
-                           </div>
-
-                           <button id="showJog" class="waves-effect waves-light btn">Jogging Activity Data</button>
-                           <div id="jogData">
-                              
-                              <div id="jogSpeedChart" style="height: 300px; width: 100%;"></div>
-                              <div id="jogUVChart" style="height: 300px; width: 100%;"></div>
-   
-                           </div>
-
-                           <button id="showBicycling" class="waves-effect waves-light btn">Bicycling Activity Data</button>
-                           <div id="bicyclingData" >
-
-                              <div id="bicycleSpeedChart" style="height: 300px; width: 100%;"></div>
-                              <div id="bicycleUVChart" style="height: 300px; width: 100%;"></div>
-   
-                           </div>-->
-
-                           <div id="activityData"> </div>
 
                            <div id="speedChart" style="height: 300px; width: 100%;"></div>
                            <div id="uvChart" style="height: 300px; width: 100%;"></div>
                            <!-- Add data here -->
                            <span id="activityDetails"></span>
 
-                         </div></div>
+                         </div>
                        </div>
                      </div>
                    </div>
@@ -267,14 +237,14 @@
                      </li>
                      <li class="collection-item" id="addDeviceForm">
                         <span id="deviceButtons">
-                           
+
                         </span>
-                        
-                        
+
+
                         <label for="deviceId">New Device ID:</label>
                         <input type="text" id="deviceId" name="deviceId" col="30">
-                        <button id="registerDevice" class="waves-effect waves-light btn">Register</button> 
-                        <!--<button id="cancel" class="waves-effect waves-light btn">Cancel</button>--> 
+                        <button id="registerDevice" class="waves-effect waves-light btn">Register</button>
+                        <!--<button id="cancel" class="waves-effect waves-light btn">Cancel</button>-->
                      </li>
                      <li class="collection-item" id="addDeviceControl"><a href="#!" id="addDevice">Add Device</a></li>
                   </ul>
@@ -282,11 +252,11 @@
 
 
 
-                  
+
 
                   <div class='red-text text-darken-2' id="errorDispl"></div>
       </div>
-             
+
       </div>
       <!--Old code-->
       <!--
