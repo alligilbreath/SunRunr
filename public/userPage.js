@@ -72,7 +72,7 @@ function displayData(data, textStatus, jqXHR){
 
 		summaryViewUpdate();
 		activitySummaryUpdate();
-		activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, activityType);
+		//activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, activityType);
 
 	}
 
@@ -88,7 +88,7 @@ function showError(jqXHR, textStatus, errorThrown){
 function summaryViewUpdate(){
 
 	$.ajax({
-		url: "/devices/summary", //Need Ali to finish this endpoint
+		url: "/devices/summary",
 		method: 'GET',
 		contentType: 'application/json',
 		data: {deviceId: device},
@@ -96,7 +96,6 @@ function summaryViewUpdate(){
 		dataType: 'json'
 	})
 		.done(function(data, textStatus, jqXHR){
-			// Need Ali to finish endpoint to get data
 
 			var showWeekData = "";
 
@@ -158,8 +157,6 @@ function activitySummaryUpdate(){
 }
 
 function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, activityType){
-
-
 
 	// Graphing Speed and UV Exposure
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,6 +223,196 @@ function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, acti
 	////////////////////////////////////////////////////////////////////////////////////////////
 
 }
+
+
+
+
+function WalkingActivityDetails(){
+	$.ajax({
+		url: "/devices/sensorData",
+		method: "GET",
+		contentType: 'application/json',
+		data: {deviceId: device},
+		headers: { 'x-auth': window.localStorage.getItem("authToken") },
+		dataType: 'json'
+	})
+	.done(function(data, textStatus, jqXHR){
+		
+		let userSpeed = data[data.length - 1].speed;// The entire array of speed; TODO: gonna need to parse this data and store it in a new variable (an array with object elements: [{y: 0}]) for CanvasJS
+		let uv = data[data.length - 1].uvIndex; 	// The entire array of uvIndex; TODO: gonna need to parse this data and store it in a new variable (an array with object elements: [{y: 0}]) for CanvasJS
+		let startTime = data[data.length - 1].startTime;
+		let endTime = data[data.length - 1].endTime;
+		let duration = data[data.length - 1].duration; // TODO: What are the units?
+		let activityType = data[data.length - 1].activityType;
+
+	// Graphing Speed and UV Exposure
+	////////////////////////////////////////////////////////////////////////////////////////////
+	let speedData = [];
+	// Iterate through userSpeed array and store each value as an object {y: speed}
+	// because CanvaJS takes data as an array w/ object elements (i.e. [{y:1}, {y:2}, ...])
+	for(var speed of userSpeed){
+		var tempSpeedObj = {y: speed};
+		speedData.push(tempSpeedObj);
+	}
+
+	// Then graph data using CanvasJS
+	var walkSpeedChart = new CanvasJS.Chart("speedChart", {
+		animationEnabled: true,
+		theme: "light2",
+		title:{
+			text: "Speed During Activity"
+		},
+		axisY:{
+			title: "Speed (mph)",
+			includeZero: false
+		},
+		axisX:{
+			title: "Time (min)"
+		},
+		data: [{
+			type: "line",
+			dataPoints: speedData
+		}]
+	});
+	walkSpeedChart.render();
+
+	//
+
+
+	//same for uv index
+	let uvData = [];
+	// Iterate through uv array
+	for(var uvIndex of uv){
+		var tempUVObj = {y: uvIndex};
+		speedData.push(tempUVObj);
+	}
+
+	// Then graph data using CanvasJS
+	var walkUVChart = new CanvasJS.Chart("uvChart", {
+		animationEnabled: true,
+		theme: "light2",
+		title:{
+			text: "UV Exposure During Activity"
+		},
+		axisY:{
+			title: "UV",
+			includeZero: false
+		},
+		axisX:{
+			title: "Time (min)"
+		},
+		data: [{
+			type: "line",
+			dataPoints: uvData
+		}]
+	});
+	walkUVChart.render();
+
+
+
+
+	})
+	.fail(function(jqXHR, textStatus, errorThrown){
+
+	});
+}
+
+function JoggingActivityDetails(){
+
+	$.ajax({
+		url: "/devices/sensorData",
+		method: "GET",
+		contentType: 'application/json',
+		data: {deviceId: device},
+		headers: { 'x-auth': window.localStorage.getItem("authToken") },
+		dataType: 'json'
+	})
+	.done(function(data, textStatus, jqXHR){
+		
+		let userSpeed = data[data.length - 1].speed;// The entire array of speed; TODO: gonna need to parse this data and store it in a new variable (an array with object elements: [{y: 0}]) for CanvasJS
+		let uv = data[data.length - 1].uvIndex; 	// The entire array of uvIndex; TODO: gonna need to parse this data and store it in a new variable (an array with object elements: [{y: 0}]) for CanvasJS
+		let startTime = data[data.length - 1].startTime;
+		let endTime = data[data.length - 1].endTime;
+		let duration = data[data.length - 1].duration; // TODO: What are the units?
+		let activityType = data[data.length - 1].activityType;
+
+	// Graphing Speed and UV Exposure
+	////////////////////////////////////////////////////////////////////////////////////////////
+	let speedData = [];
+	// Iterate through userSpeed array and store each value as an object {y: speed}
+	// because CanvaJS takes data as an array w/ object elements (i.e. [{y:1}, {y:2}, ...])
+	for(var speed of userSpeed){
+		var tempSpeedObj = {y: speed};
+		speedData.push(tempSpeedObj);
+	}
+
+	// Then graph data using CanvasJS
+	var walkSpeedChart = new CanvasJS.Chart("speedChart", {
+		animationEnabled: true,
+		theme: "light2",
+		title:{
+			text: "Speed During Activity"
+		},
+		axisY:{
+			title: "Speed (mph)",
+			includeZero: false
+		},
+		axisX:{
+			title: "Time (min)"
+		},
+		data: [{
+			type: "line",
+			dataPoints: speedData
+		}]
+	});
+	walkSpeedChart.render();
+
+	//
+
+
+	//same for uv index
+	let uvData = [];
+	// Iterate through uv array
+	for(var uvIndex of uv){
+		var tempUVObj = {y: uvIndex};
+		speedData.push(tempUVObj);
+	}
+
+	// Then graph data using CanvasJS
+	var walkUVChart = new CanvasJS.Chart("uvChart", {
+		animationEnabled: true,
+		theme: "light2",
+		title:{
+			text: "UV Exposure During Activity"
+		},
+		axisY:{
+			title: "UV",
+			includeZero: false
+		},
+		axisX:{
+			title: "Time (min)"
+		},
+		data: [{
+			type: "line",
+			dataPoints: uvData
+		}]
+	});
+	walkUVChart.render();
+
+
+
+
+	})
+	.fail(function(jqXHR, textStatus, errorThrown){
+
+	});
+	
+}
+
+function BicyclingActivityDetails(){}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -281,6 +468,13 @@ $(function () {
 	 	window.localStorage.removeItem('authToken'); // This is to remove the authToken
 	 	window.location = "login.html"; // Take user back to log in page
 	 });
+
+
+	 $('#showWalk').click(WalkingActivityDetails);
+	 $('#showJog').click(JoggingActivityDetails);
+	 $('#showBicycling').click(BicyclingActivityDetails);
+
+
 
 	 $("#weatherReport").click(function(){
 		window.location = "weatherReport.html"; // Take user back to log in page
