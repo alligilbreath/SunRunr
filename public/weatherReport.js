@@ -1,34 +1,47 @@
 function showWeather(data, textStatus, jqXHR){
 
 	let today = "<ul>" + 
-	"Temperature: " +
-	"" +
-	 
+	"<li>Temperature: " + data.list.main.temp +
+	"<li>UV" + 6.0 +
+	"<li>Humidity: " + data.list.main.humidity +
+	"<li>Weather" + data.list.weather.main +
 	+ "</ul>";
 
 	let day2 = "<ul>" + "" 
-	"" +
-	+ "</ul>";
+	"<li>Temperature: " + data.list.main.temp +
+	"<li>UV" + 7.2 +	
+	"<li>Humidity: " + data.list.main.humidity +
+	"<li>Weather" + data.list.weather.main +
+	"</ul>";
 
-	let day3 = "<ul>" + "" 
-	"" +
-	+ "</ul>";
+	let day3 = "<ul>" + 
+	"<li>Temperature: " + data.list.main.temp +
+	"<li>UV" + 6.9 +
+	"<li>Humidity: " + data.list.main.humidity +
+	"<li>Weather" + data.list.weather.main +
+	"</ul>";
 
 	let day4 = "<ul>" + "" 
-	"" +
-	+ "</ul>";
+	"<li>Temperature: " + data.list.main.temp +
+	"<li>UV" + 6.5 +
+	"<li>Humidity: " + data.list.main.humidity +
+	"<li>Weather" + data.list.weather.main +
+	"</ul>";
 
 	let day5 = "<ul>" + "" 
-	"" +
-	+ "</ul>";
+	"<li>Temperature: " + data.list.main.temp +
+	"<li>UV" + 7.9 +
+	"<li>Humidity: " + data.list.main.humidity +
+	"<li>Weather" + data.list.weather.main +
+	"</ul>";
 
 
 
-	('#today').html();
-	('#day2').html();
-	('#day3').html();
-	('#day4').html();
-	('#day5').html();
+	('#today').html(today);
+	('#day2').html(day2);
+	('#day3').html(day3);
+	('#day4').html(day4);
+	('#day5').html(day5);
 
 
 
