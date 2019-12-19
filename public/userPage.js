@@ -16,7 +16,7 @@ var device = "3a0030001851373237343331";
 ///////////////////////////////////////////////////////////////////////////////////////
 function showData(data, textStatus, jqXHR){
 	if(data != null){
-		let deviceId = {deviceId: data.devices[0]};
+		let deviceId = {deviceId: data.devices[0].deviceId};
 
 		// Make buttons for different devices here
 		var email = data.email; // old version: data[data.length - 1].email
@@ -26,8 +26,7 @@ function showData(data, textStatus, jqXHR){
 		$('#email').html(email);
 		$('#fullName').html(fullName);
 		$('#lastAccess').html(lastAccess);
-
-		let deviceId = {deviceId: device};
+		//let deviceInfo = {'deviceId' : deviceId};
 		$.ajax({
 			url: "/devices/sensorData", //TODO: Clarify actual url endpoint
 			method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
@@ -146,7 +145,7 @@ function activitySummaryUpdate(){
 		for(var i = 0; i < data.length; i++){
 			var activityType = data[i].activityType;
 			var date = data[i].startTime;
-			var dateString = date.toLocaleDateString("en-US");
+			var dateString = date.toString();
 			innerHTML += "<li class=\"collection-item\">";
 
 		}

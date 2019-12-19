@@ -52,14 +52,14 @@ router.post("/setThreshold", function(req, res){
 
 //Get all of the details for an activity
 router.get('/activityDetail', function(req, res, next){
-  let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
+  let lastData = deviceData.find({req.query.deviceId}).sort({_id:-1}).limit(1);
   res.status(200).json(lastData);
 
 });
 
 router.get('/summary', function(req, res, next){
   let responseJson = {dataPoints : [], duration : 0, uv : 0};
-  let dataPoints = deviceData.find({"deviceId" : req.body.deviceId});
+  let dataPoints = deviceData.find({"deviceId" : req.query.deviceId});
   let currDate = Date.now();
   let pastDate = Date.now();
   pastDate.setDate(currDate.getDate() - 1);
@@ -219,7 +219,7 @@ router.post('/changeActivity', function (req, res, next){
 //Get all sensor data for deviceId query
 router.get('/sensorData', function(req, res, next){
   //console.log("in sensor data");
-	DeviceData.find({"deviceId": req.body.deviceId}).exec(function(err,data){
+	DeviceData.find({"deviceId": req.query.deviceId}).limit(5).exec(function(err,data){
 		if(err){
       console.log("/sensor data error");
       //wasn't returning a status
@@ -228,7 +228,7 @@ router.get('/sensorData', function(req, res, next){
 		else{
     //  console.log("/sensor data sent back");
       //console.log(data);
-			res.status(200).send(JSON.stringify(data));
+			res.status(200).json(data);
 		}
 	});
 });

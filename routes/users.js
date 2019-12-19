@@ -85,11 +85,11 @@ router.get("/account" , function(req, res) {
    try {
       var decodedToken = jwt.decode(authToken, secret);
       var userStatus = {
-        success = false,
-        email = "",
-        fullName = "",
-        lastAccess = Date.now(),
-        devices = []
+        success : "",
+        email : "",
+        fullName : "",
+        lastAccess : Date.now(),
+        devices : []
       };
 
       User.findOne({email: decodedToken.email}, function(err, user) {
