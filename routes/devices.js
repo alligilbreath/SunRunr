@@ -53,7 +53,7 @@ router.post("/setThreshold", function(req, res){
 //Get all of the details for an activity
 router.get('/activityDetail', function(req, res, next){
   console.log(req.query);
-  deviceData.find({deviceId: req.query.deviceId, speed: {$gt:{$size = 1}}}).limit(1).exec(function(err, data){
+  deviceData.find({deviceId: req.query.deviceId}).limit(1).exec(function(err, data){
     if(err){
       console.log("Bad");
       res.status(400).json({message: "error"});

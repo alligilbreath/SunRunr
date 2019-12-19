@@ -146,8 +146,28 @@ function activitySummaryUpdate(){
 			var activityType = data[i].activityType;
 			var date = data[i].startTime;
 			var dateString = date.toString();
-			innerHTML += "<li class=\"collection-item\">";
+			var duration = data[i].duration;
+			var uvexposure = data[i].uvIndex[0];
+			var temp = data[i].temperature;
+			var humid = data[i].humidity;
+			let timeDuration = duration * (1/1000) * (1/60) * (1/60);
+			if(data[i].activityType == "bicycling"){
+				calBurned += bicycleCalPerHour * timeDuration;
+			}
+			else if(data[i].activityType == "jogging"){
+				calBurned += jogCalPerHour * timeDuration;
 
+			}
+			// walking as else
+			else{ calBurned += walkCalPerHour * timeDuration; }
+		}
+			innerHTML += "<li class=\"collection-item\"> Activity: " + activityType + "</li>";
+			innerHTML += "<li class=\"collection-item\"> Date: " + dateString + "</li>";
+			innerHTML += "<li class=\"collection-item\"> Duration [ms]: " + duration + "</li>";
+			innerHTML += "<li class=\"collection-item\"> Calories: " + calBurned + "</li>";
+			innerHTML += "<li class=\"collection-item\"> UV exposure: " + uvexposure + "</li>";
+			innerHTML += "<li class=\"collection-item\"> Temperature: " + temp + "</li>";
+			innerHTML += "<li class=\"collection-item\"> Humidity:  " + humid + "</li>";
 		}
 	})
 	.fail(function(jqXHR, textStatus, errorThrown){
@@ -234,7 +254,7 @@ function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, acti
 		// Iterate through uv array
 		for(var uvIndex of uv){
 			var tempUVObj = {y: uvIndex};
-			speedData.push(tempUVObj);
+			uvData.push(tempUVObj);
 		}
 
 		// Then graph data using CanvasJS
