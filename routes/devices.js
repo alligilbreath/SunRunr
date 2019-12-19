@@ -115,6 +115,7 @@ router.get('/weather', function(req, res, next){
     else{
       var apiRes = JSON.parse(body);
       var list = apiRes.list;
+      console.log(list);
       responseJson.forecast = list;
       res.status(200).json(responseJson);
     }

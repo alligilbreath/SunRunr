@@ -147,7 +147,7 @@ function activitySummaryUpdate(){
 		for(var i = 0; i < data.length; i++){
 			var activityType = data[i].activityType;
 			var date = data[i].startTime;
-			var dateString = date.toLocaleDateString("en-US")
+			var dateString = date.toLocaleDateString("en-US");
 			innerHTML += "<li class=\"collection-item\">";
 
 		}
