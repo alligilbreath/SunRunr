@@ -8,6 +8,9 @@ var bicyclingMET = 7.5;
 var walkCalPerHour = avgWeight * walkMET;
 var jogCalPerHour = avgWeight * joggMET;
 var bicycleCalPerHour = avgWeight * bicyclingMET;
+
+//Default Device ID for testing
+var device = "3a0030001851373237343331";
 ///////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +20,7 @@ function showData(data, textStatus, jqXHR){
 
 		// Make buttons for different devices here
 		var email = data.email; // old version: data[data.length - 1].email
-		var fullName = data.fullName; // old version: data[data.length - 1].fullName 
+		var fullName = data.fullName; // old version: data[data.length - 1].fullName
 		var lastAccess = data.lastAccess; // old version: data[data.length - 1].lastAccess
 
 		$('#email').html(email);
@@ -29,6 +32,7 @@ function showData(data, textStatus, jqXHR){
 			url: "/devices/sensorData", //TODO: Clarify actual url endpoint
 			method: 'GET', // TODO: Why is it a POST. Shouldn't it be a GET?
 			contentType: 'application/json',
+			data: {deviceID : }
 			headers: { 'x-auth': window.localStorage.getItem("authToken") },
 			dataType: 'json'
 		 })
@@ -54,7 +58,7 @@ function displayData(data, textStatus, jqXHR){
 
 	//var longi = data[data.length - 1].longitude;
 	//var lati = data[data.length - 1].latitude;
-	if(data.lenth > 0){
+	if(data.length > 0){
 		var userSpeed = data[data.length - 1].speed;// The entire array of speed; TODO: gonna need to parse this data and store it in a new variable (an array with object elements: [{y: 0}]) for CanvasJS
 		var uv = data[data.length - 1].uvIndex; 	// The entire array of uvIndex; TODO: gonna need to parse this data and store it in a new variable (an array with object elements: [{y: 0}]) for CanvasJS
 		var startTime = data[data.length - 1].startTime;
@@ -87,21 +91,22 @@ function summaryViewUpdate(){
 		url: "/devices/summary", //Need Ali to finish this endpoint
 		method: 'GET',
 		contentType: 'application/json',
+		data: {deviceId: device},
 		headers: { 'x-auth': window.localStorage.getItem("authToken") },
 		dataType: 'json'
 	})
 		.done(function(data, textStatus, jqXHR){
 			// Need Ali to finish endpoint to get data
-			
+
 			var showWeekData = "";
 
-			let showDuration = data.duration;
-			
+			let showDuration = data.totalDuration;
+
 			let calBurnedWeek = 0;
-			
+
 			for(var i = 0; i < data.dataPoints.length; i++){
 				let timeDuration = data.dataPoints[i].duration * (1/1000) * (1/60) * (1/60);
-				
+
 				if(data.dataPoints[i].activityType == "bicycling"){
 					calBurnedWeek += bicycleCalPerHour * timeDuration;
 				}
@@ -113,13 +118,13 @@ function summaryViewUpdate(){
 				else{ calBurnedWeek += walkCalPerHour * timeDuration; }
 			}
 
-			showWeekData = "<ul>" 
-			+ "<li> Total Time Spent Exercising" + showDuration + "</li>" 			
+			showWeekData = "<ul>"
+			+ "<li> Total Time Spent Exercising" + showDuration + "</li>"
 			+ "<li> Total Calories Burned" + showDuration + "</li>"
-			+ "<li> Total UV Exposure" + data.uv + "</li>" 
+			+ "<li> Total UV Exposure" + data.totalUV + "</li>"
 			+"</ul>";
 
-			$('#summaryView').html(showWeekData);			
+			$('#summaryView').html(showWeekData);
 
 		})
 		.fail(function(jqXHR, textStatus, errorThrown){
@@ -129,13 +134,33 @@ function summaryViewUpdate(){
 }
 
 function activitySummaryUpdate(){
+	$.ajax({
+		url: "/devices/sensorData"
+		method: "GET",
+		contentType: 'application/json',
+		data: {deviceId: device},
+		headers: { 'x-auth': window.localStorage.getItem("authToken") },
+		dataType: 'json'
+	})
+	.done(function(data, textStatus, jqXHR){
+		var innerHTML = "";
+		for(var i = 0; i < data.length; i++){
+			var activityType = data[i].activityType;
+			var date = data[i].startTime;
+			var dateString = date.toLocaleDateString("en-US")
+			innerHTML += "<li class=\"collection-item\">";
 
+		}
+	})
+	.fail(function(jqXHR, textStatus, errorThrown){
+
+	});
 }
 
 function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, activityType){
-	
-	
-	
+
+
+
 	// Graphing Speed and UV Exposure
 	////////////////////////////////////////////////////////////////////////////////////////////
 	let speedData = [];
