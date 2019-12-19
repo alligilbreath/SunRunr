@@ -91,10 +91,26 @@ router.get('/summary', function(req, res, next){
 });
 
 router.get('/weather', function(req, res, next){
-  let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
+  let lastLat = 35;
+  let lastLong = 139;
+  console.log("Entered here");
+  deviceData.findOne().exec(function(err, data){
+    if(!err){
+      console.log("Found one");
+      lastLat = data.latitude;
+      lastLong = data.longitude;
+    }
+    else{
+      console.log("Entered error");
+      res.status(400).json("error on server");
+      return;
+    }
+  });
   let responseJson = { forecast : []};
-  lastLat = lastData.latitude;
-  lastLong = lastData.longitude;
+  //lastLat = lastData.latitude;
+  console.log("last lat " + lastLat);
+  //lastLong = lastData.longitude;
+  console.log("Last log " + lastLong);
   request({
     method: "GET",
     uri: "http://api.openweathermap.org/data/2.5/forecast",
@@ -114,6 +130,7 @@ router.get('/weather', function(req, res, next){
     }
     else{
       var apiRes = JSON.parse(body);
+      console.log("apiRes");
       var list = apiRes.list;
       console.log(list);
       responseJson.forecast = list;
@@ -178,7 +195,7 @@ router.get('/myDevices', function(req, res, next){
 
 //Change activity type
 router.post('/changeActivity', function (req, res, next){
-  let lastData = deviceData.find({}).sort({_id:-1}).limit(1);
+  let lastData = DeviceData.find({}).sort({_id:-1}).limit(1);
   let responseJson = {message : ""};
   if(!req.body.hasOwnProperty("type")){
     responseJson.message = "Missing activity type";
@@ -202,7 +219,7 @@ router.post('/changeActivity', function (req, res, next){
 //Get all sensor data for deviceId query
 router.get('/sensorData', function(req, res, next){
   //console.log("in sensor data");
-	deviceData.find({"deviceId": req.body.deviceId}).exec(function(err,data){
+	DeviceData.find({"deviceId": req.body.deviceId}).exec(function(err,data){
 		if(err){
       console.log("/sensor data error");
       //wasn't returning a status
