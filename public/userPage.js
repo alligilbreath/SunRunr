@@ -1,7 +1,14 @@
-var avgWeight = 137;
+//Global Variables
+///////////////////////////////////////////////////
+var avgWeight = 62; //kgrams
 var walkMET = 6.0;
 var joggMET = 8.3;
 var bicyclingMET = 7.5;
+
+var walkCalPerHour = avgWeight * walkMET;
+var jogCalPerHour = avgWeight * joggMET;
+var bicycleCalPerHour = avgWeight * bicyclingMET;
+///////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////
 function showData(data, textStatus, jqXHR){
@@ -9,9 +16,9 @@ function showData(data, textStatus, jqXHR){
 		let deviceId = {deviceId: data[data.length - 1].userDevices[0]};
 
 		// Make buttons for different devices here
-		var email = data[data.length - 1].email;
-		var fullName = data[data.length - 1].fullName;
-		var lastAccess = data[data.length - 1].lastAccess;
+		var email = data.email; // old version: data[data.length - 1].email
+		var fullName = data.fullName; // old version: data[data.length - 1].fullName 
+		var lastAccess = data.lastAccess; // old version: data[data.length - 1].lastAccess
 
 		$('#email').html(email);
 		$('#fullName').html(fullName);
@@ -75,7 +82,6 @@ function showError(jqXHR, textStatus, errorThrown){
 
 ////////////////////////////////////////////////////////////////////////////////////
 function summaryViewUpdate(){
-	let deviceId = {deviceId: $("#deviceId").val()};
 
 	$.ajax({
 		url: "/devices/summary", //Need Ali to finish this endpoint
@@ -85,9 +91,35 @@ function summaryViewUpdate(){
 		dataType: 'json'
 	})
 		.done(function(data, textStatus, jqXHR){
+			// Need Ali to finish endpoint to get data
+			
+			var showWeekData = "";
 
-		// Need Ali to finish endpoint to get data
+			let showDuration = data.duration;
+			
+			let calBurnedWeek = 0;
+			
+			for(var i = 0; i < data.dataPoints.length; i++){
+				let timeDuration = data.dataPoints[i].duration * (1/1000) * (1/60) * (1/60);
+				
+				if(data.dataPoints[i].activityType == "bicycling"){
+					calBurnedWeek += bicycleCalPerHour * timeDuration;
+				}
+				else if(data.dataPoints[i].activityType == "jogging"){
+					calBurnedWeek += jogCalPerHour * timeDuration;
 
+				}
+				// walking as else
+				else{ calBurnedWeek += walkCalPerHour * timeDuration; }
+			}
+
+			showWeekData = "<ul>" 
+			+ "<li> Total Time Spent Exercising" + showDuration + "</li>" 			
+			+ "<li> Total Calories Burned" + showDuration + "</li>"
+			+ "<li> Total UV Exposure" + data.uv + "</li>" 
+			+"</ul>";
+
+			$('#summaryView').html(showWeekData);			
 
 		})
 		.fail(function(jqXHR, textStatus, errorThrown){
@@ -101,6 +133,11 @@ function activitySummaryUpdate(){
 }
 
 function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, activityType){
+	
+	
+	
+	// Graphing Speed and UV Exposure
+	////////////////////////////////////////////////////////////////////////////////////////////
 	let speedData = [];
 	// Iterate through userSpeed array and store each value as an object {y: speed}
 	// because CanvaJS takes data as an array w/ object elements (i.e. [{y:1}, {y:2}, ...])
@@ -149,7 +186,7 @@ function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, acti
 			text: "UV Exposure During Activity"
 		},
 		axisY:{
-			title: "UV (WRITE UNITS HERE)",
+			title: "UV",
 			includeZero: false
 		},
 		axisX:{
@@ -161,7 +198,7 @@ function activityDetailsUpdate(userSpeed, uv, startTime, endTime, duration, acti
 		}]
 	});
 	uvChart.render();
-
+	////////////////////////////////////////////////////////////////////////////////////////////
 
 }
 ////////////////////////////////////////////////////////////////////////////////////
