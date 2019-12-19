@@ -4,35 +4,35 @@ function showWeather(data, textStatus, jqXHR){
 	"<li>Temperature [K]: " + data.forecast[0].main.temp +
 	"<li>UV " + 6.0 +
 	"<li>Humidity: " + data.forecast[0].main.humidity +
-	"<li>Weather " + data.forecast[0].weather[1].description +
+	"<li>Weather: " + data.forecast[0].weather[1].description +
 	+ "</ul>";
 
 	let day2 = "<ul>" +
 	"<li>Temperature [K]: " + data.forecast[1].main.temp +
 	"<li>UV " + 7.2 +
 	"<li>Humidity: " + data.forecast[1].main.humidity +
-	"<li>Weather " + data.forecast[1].weather[0].description +
+	"<li>Weather: " + data.forecast[1].weather[0].description +
 	"</ul>";
 
 	let day3 = "<ul>" +
 	"<li>Temperature [K]: " + data.forecast[2].main.temp +
 	"<li>UV " + 6.9 +
 	"<li>Humidity: " + data.forecast[2].main.humidity +
-	"<li>Weather " + data.forecast[2].weather[0].description +
+	"<li>Weather: " + data.forecast[2].weather[0].description +
 	"</ul>";
 
 	let day4 = "<ul>" +
 	"<li>Temperature [K]: " + data.forecast[3].main.temp +
 	"<li>UV " + 6.5 +
 	"<li>Humidity: " + data.forecast[3].main.humidity +
-	"<li>Weather " + data.forecast[3].weather[0].description +
+	"<li>Weather: " + data.forecast[3].weather[0].description +
 	"</ul>";
 
 	let day5 = "<ul>" +
 	"<li>Temperature [K]: " + data.forecast[4].main.temp +
 	"<li>UV " + 7.9 +
 	"<li>Humidity: " + data.forecast[4].main.humidity +
-	"<li>Weather " + data.forecast[4].weather[0].description +
+	"<li>Weather: " + data.forecast[4].weather[0].description +
 	"</ul>";
 
 
