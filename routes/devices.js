@@ -748,14 +748,14 @@ router.post('/sunRun', function(req, res) {
         responseJson.status = "Paused";
         responseJson.message = "In paused state, so all is good";
         console.log("Paused");
-        res.status().send(JSON.stringify(responseJson));
+        res.status(200).send(JSON.stringify(responseJson));
         return;
       }
       else{
 				responseJson.status = "ERROR";
         console.log("ERROR: Other");
 				responseJson.message = "Device ID " + req.body.deviceId + " not registered.";
-				res.status(201).send(JSON.stringify(responseJson));
+				res.status(400).send(JSON.stringify(responseJson));
         return;
       }
 
@@ -798,7 +798,7 @@ router.delete('/deleteDevice', function(req, res){
 						return res.status(400).json({ error: "Error removing data from deviceData" });
 					}
 					else {
-						return res.status().json({ message: "Succesfully deleted device"});
+						return res.status(200).json({ message: "Succesfully deleted device"});
 					}
 				});
 			}

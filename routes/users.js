@@ -94,7 +94,7 @@ router.get("/account" , function(req, res) {
             userStatus['success'] = true;
             userStatus['email'] = user.email;
             userStatus['fullName'] = user.fullName;
-            userStatus['lastAccess'] = user.lastAccess;
+            userStatus['lastAccess'] = Date.now();
 
             // Find devices based on decoded token
 		      Device.find({ userEmail : decodedToken.email}, function(err, devices) {
@@ -118,6 +118,34 @@ router.get("/account" , function(req, res) {
    catch (ex) {
       return res.status(401).json({success: false, message: "Invalid authentication token."});
    }
+});
+
+router.post("/setThreshold", function(req, res){
+  if (!req.body.hasOwnProperty("email")) {
+     return res.status(400).json({success: false, message: "Missing email in request"});
+  }
+  else{
+    try {
+      Users.findOne({"email": req.body.email}, function (err, user){
+        if(!err){
+          user.threshold = req.body.threshold;
+          let devices = users.userDevices;
+          for (var i = 0; i < devices.length; i++){
+            devices[i].threshold = req.body.threshold;
+          }
+          return res.status(201).json({success: true, message: "Threshold updated."});
+        }
+        else{
+          return res.status(400).json({success: false, message: "User does not exist."})
+        }
+      });
+
+    }
+    catch{
+      return res.status(400).json({success: false, message: "Couldn't change threshold."});
+    }
+  }
+
 });
 
 
